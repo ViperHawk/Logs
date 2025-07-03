@@ -1,0 +1,422 @@
+# Red Hat Enterprise Linux 10 Log Entries Elasticsearch Queries
+**Author: Ross Durrer**  
+**Created: 2025**
+
+This document contains Elasticsearch queries for Red Hat Enterprise Linux 10 log entries, designed to search for logs over a two-week period and display results in table format.
+
+## Query Syntax Reference
+
+### Kibana Discover Query Bar Syntax
+```
+field_name:value AND field_name2:value2
+```
+
+### Elasticsearch Query DSL (for API/Dev Tools)
+```json
+{
+  "query": {
+    "bool": {
+      "must": [
+        {"term": {"field_name": "value"}},
+        {"range": {"@timestamp": {"gte": "now-14d", "lte": "now"}}}
+      ]
+    }
+  }
+}
+```
+
+## System Log Entries (/var/log/messages)
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **All System Messages** | `_index:"Linux" AND log.file.path:"/var/log/messages" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/messages"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Kernel Messages** | `_index:"Linux" AND log.file.path:"/var/log/messages" AND syslog.facility:0 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/messages"}},{"term":{"syslog.facility":"0"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Critical System Errors** | `_index:"Linux" AND log.file.path:"/var/log/messages" AND (log.syslog.priority:(0 OR 1 OR 2)) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/messages"}},{"terms":{"log.syslog.priority":["0","1","2"]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **System Daemon Messages** | `_index:"Linux" AND log.file.path:"/var/log/messages" AND syslog.facility:3 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/messages"}},{"term":{"syslog.facility":"3"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Systemd Service Messages** | `_index:"Linux" AND log.file.path:"/var/log/messages" AND process.name:"systemd" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/messages"}},{"term":{"process.name":"systemd"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **NetworkManager Events** | `_index:"Linux" AND log.file.path:"/var/log/messages" AND process.name:"NetworkManager" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/messages"}},{"term":{"process.name":"NetworkManager"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Out of Memory Events** | `_index:"Linux" AND log.file.path:"/var/log/messages" AND message:"Out of memory" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/messages"}},{"match":{"message":"Out of memory"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Hardware Errors** | `_index:"Linux" AND log.file.path:"/var/log/messages" AND (message:("hardware" OR "disk error" OR "I/O error")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/messages"}},{"bool":{"should":[{"match":{"message":"hardware"}},{"match":{"message":"disk error"}},{"match":{"message":"I/O error"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Service Start/Stop** | `_index:"Linux" AND log.file.path:"/var/log/messages" AND (message:("started" OR "stopped" OR "Starting" OR "Stopping")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/messages"}},{"bool":{"should":[{"match":{"message":"started"}},{"match":{"message":"stopped"}},{"match":{"message":"Starting"}},{"match":{"message":"Stopping"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Mount/Unmount Events** | `_index:"Linux" AND log.file.path:"/var/log/messages" AND (message:("mounted" OR "unmounted" OR "mount")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/messages"}},{"bool":{"should":[{"match":{"message":"mounted"}},{"match":{"message":"unmounted"}},{"match":{"message":"mount"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+## Security Log Entries (/var/log/secure)
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **All Security Messages** | `_index:"Linux" AND log.file.path:"/var/log/secure" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/secure"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **SSH Successful Logins** | `_index:"Linux" AND log.file.path:"/var/log/secure" AND process.name:"sshd" AND message:"Accepted" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/secure"}},{"term":{"process.name":"sshd"}},{"match":{"message":"Accepted"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **SSH Failed Logins** | `_index:"Linux" AND log.file.path:"/var/log/secure" AND process.name:"sshd" AND (message:("Failed" OR "Invalid")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/secure"}},{"term":{"process.name":"sshd"}},{"bool":{"should":[{"match":{"message":"Failed"}},{"match":{"message":"Invalid"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **SSH Connection Closed** | `_index:"Linux" AND log.file.path:"/var/log/secure" AND process.name:"sshd" AND message:"Connection closed" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/secure"}},{"term":{"process.name":"sshd"}},{"match":{"message":"Connection closed"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Sudo Commands** | `_index:"Linux" AND log.file.path:"/var/log/secure" AND process.name:"sudo" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/secure"}},{"term":{"process.name":"sudo"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **User Account Changes** | `_index:"Linux" AND log.file.path:"/var/log/secure" AND (message:("user added" OR "user deleted" OR "password changed")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/secure"}},{"bool":{"should":[{"match":{"message":"user added"}},{"match":{"message":"user deleted"}},{"match":{"message":"password changed"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Authentication Failures** | `_index:"Linux" AND log.file.path:"/var/log/secure" AND message:"authentication failure" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/secure"}},{"match":{"message":"authentication failure"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **PAM Authentication** | `_index:"Linux" AND log.file.path:"/var/log/secure" AND process.name:*pam* AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/secure"}},{"wildcard":{"process.name":"*pam*"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Root Access Attempts** | `_index:"Linux" AND log.file.path:"/var/log/secure" AND (user.name:"root" OR message:"root") AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/secure"}},{"bool":{"should":[{"term":{"user.name":"root"}},{"match":{"message":"root"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Login Session Events** | `_index:"Linux" AND log.file.path:"/var/log/secure" AND (message:("session opened" OR "session closed")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/secure"}},{"bool":{"should":[{"match":{"message":"session opened"}},{"match":{"message":"session closed"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+## Boot Log Entries (/var/log/boot.log)
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **All Boot Messages** | `_index:"Linux" AND log.file.path:"/var/log/boot.log" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/boot.log"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Boot Failures** | `_index:"Linux" AND log.file.path:"/var/log/boot.log" AND (message:("FAILED" OR "failed") OR log.syslog.priority:3) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/boot.log"}},{"bool":{"should":[{"match":{"message":"FAILED"}},{"match":{"message":"failed"}},{"term":{"log.syslog.priority":"3"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Service Start Successes** | `_index:"Linux" AND log.file.path:"/var/log/boot.log" AND (message:("OK" OR "started")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/boot.log"}},{"bool":{"should":[{"match":{"message":"OK"}},{"match":{"message":"started"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Hardware Detection** | `_index:"Linux" AND log.file.path:"/var/log/boot.log" AND (message:("detected" OR "found" OR "hardware")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/boot.log"}},{"bool":{"should":[{"match":{"message":"detected"}},{"match":{"message":"found"}},{"match":{"message":"hardware"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Module Loading** | `_index:"Linux" AND log.file.path:"/var/log/boot.log" AND (message:("module" OR "loaded" OR "insmod")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/boot.log"}},{"bool":{"should":[{"match":{"message":"module"}},{"match":{"message":"loaded"}},{"match":{"message":"insmod"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Network Interface Init** | `_index:"Linux" AND log.file.path:"/var/log/boot.log" AND (message:("eth" OR "interface" OR "network")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/boot.log"}},{"bool":{"should":[{"match":{"message":"eth"}},{"match":{"message":"interface"}},{"match":{"message":"network"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+## Cron Log Entries (/var/log/cron)
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **All Cron Messages** | `_index:"Linux" AND log.file.path:"/var/log/cron" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/cron"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Cron Job Executions** | `_index:"Linux" AND log.file.path:"/var/log/cron" AND process.name:"CROND" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/cron"}},{"term":{"process.name":"CROND"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Crontab Changes** | `_index:"Linux" AND log.file.path:"/var/log/cron" AND (message:("crontab" OR "LIST" OR "REPLACE")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/cron"}},{"bool":{"should":[{"match":{"message":"crontab"}},{"match":{"message":"LIST"}},{"match":{"message":"REPLACE"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Root Cron Jobs** | `_index:"Linux" AND log.file.path:"/var/log/cron" AND user.name:"root" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/cron"}},{"term":{"user.name":"root"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Cron Failures** | `_index:"Linux" AND log.file.path:"/var/log/cron" AND (log.syslog.priority:3 OR message:("failed" OR "error")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/cron"}},{"bool":{"should":[{"term":{"log.syslog.priority":"3"}},{"match":{"message":"failed"}},{"match":{"message":"error"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+## Mail Log Entries (/var/log/maillog)
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **All Mail Messages** | `_index:"Linux" AND log.file.path:"/var/log/maillog" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/maillog"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Postfix Messages** | `_index:"Linux" AND log.file.path:"/var/log/maillog" AND process.name:postfix* AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/maillog"}},{"wildcard":{"process.name":"postfix*"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Sent Mail** | `_index:"Linux" AND log.file.path:"/var/log/maillog" AND (message:"sent" OR email.delivery.status:"sent") AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/maillog"}},{"bool":{"should":[{"match":{"message":"sent"}},{"term":{"email.delivery.status":"sent"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Bounced Mail** | `_index:"Linux" AND log.file.path:"/var/log/maillog" AND (message:("bounced" OR "deferred") OR email.delivery.status:"bounced") AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/maillog"}},{"bool":{"should":[{"match":{"message":"bounced"}},{"match":{"message":"deferred"}},{"term":{"email.delivery.status":"bounced"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Mail Delivery Failures** | `_index:"Linux" AND log.file.path:"/var/log/maillog" AND (log.syslog.priority:3 OR message:("failed" OR "reject")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/maillog"}},{"bool":{"should":[{"term":{"log.syslog.priority":"3"}},{"match":{"message":"failed"}},{"match":{"message":"reject"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **SPAM Detection** | `_index:"Linux" AND log.file.path:"/var/log/maillog" AND (message:("spam" OR "SPAM" OR "blocked")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/maillog"}},{"bool":{"should":[{"match":{"message":"spam"}},{"match":{"message":"SPAM"}},{"match":{"message":"blocked"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+## Systemd Journal Entries (journalctl equivalent)
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **All Journal Messages** | `_index:"Linux" AND systemd.transport:* AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"exists":{"field":"systemd.transport"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Systemd Unit Failures** | `_index:"Linux" AND systemd.transport:* AND (message:("failed" OR "Failed")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"exists":{"field":"systemd.transport"}},{"bool":{"should":[{"match":{"message":"failed"}},{"match":{"message":"Failed"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Service State Changes** | `_index:"Linux" AND systemd.transport:* AND (message:("Started" OR "Stopped" OR "Reloaded")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"exists":{"field":"systemd.transport"}},{"bool":{"should":[{"match":{"message":"Started"}},{"match":{"message":"Stopped"}},{"match":{"message":"Reloaded"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Kernel Messages** | `_index:"Linux" AND systemd.transport:"kernel" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"systemd.transport":"kernel"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **User Process Messages** | `_index:"Linux" AND systemd.transport:"stdout" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"systemd.transport":"stdout"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **System Boot Messages** | `_index:"Linux" AND systemd.transport:* AND (message:("boot" OR "Boot" OR "startup")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"exists":{"field":"systemd.transport"}},{"bool":{"should":[{"match":{"message":"boot"}},{"match":{"message":"Boot"}},{"match":{"message":"startup"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Error Level Messages** | `_index:"Linux" AND systemd.transport:* AND (log.syslog.priority:(0 OR 1 OR 2 OR 3)) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"exists":{"field":"systemd.transport"}},{"terms":{"log.syslog.priority":["0","1","2","3"]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **User Sessions** | `_index:"Linux" AND systemd.transport:* AND (message:("session" OR "login" OR "logout")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"exists":{"field":"systemd.transport"}},{"bool":{"should":[{"match":{"message":"session"}},{"match":{"message":"login"}},{"match":{"message":"logout"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+## DNF/YUM Package Manager Logs (/var/log/dnf.log)
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **All Package Manager Activity** | `_index:"Linux" AND log.file.path:"/var/log/dnf.log" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/dnf.log"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Package Installations** | `_index:"Linux" AND log.file.path:"/var/log/dnf.log" AND (package.action:"Installed" OR message:"Installed") AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/dnf.log"}},{"bool":{"should":[{"term":{"package.action":"Installed"}},{"match":{"message":"Installed"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Package Updates** | `_index:"Linux" AND log.file.path:"/var/log/dnf.log" AND (package.action:"Updated" OR message:"Updated") AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/dnf.log"}},{"bool":{"should":[{"term":{"package.action":"Updated"}},{"match":{"message":"Updated"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Package Removals** | `_index:"Linux" AND log.file.path:"/var/log/dnf.log" AND (package.action:("Erased" OR "Removed") OR message:("Erased" OR "Removed")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/dnf.log"}},{"bool":{"should":[{"terms":{"package.action":["Erased","Removed"]}},{"match":{"message":"Erased"}},{"match":{"message":"Removed"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Repository Updates** | `_index:"Linux" AND log.file.path:"/var/log/dnf.log" AND (message:("repository" OR "repo" OR "metadata")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/dnf.log"}},{"bool":{"should":[{"match":{"message":"repository"}},{"match":{"message":"repo"}},{"match":{"message":"metadata"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **DNF Errors** | `_index:"Linux" AND log.file.path:"/var/log/dnf.log" AND (log.syslog.priority:3 OR message:("error" OR "failed")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/dnf.log"}},{"bool":{"should":[{"term":{"log.syslog.priority":"3"}},{"match":{"message":"error"}},{"match":{"message":"failed"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+## Audit Log Entries (/var/log/audit/audit.log)
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **All Audit Messages** | `_index:"Linux" AND log.file.path:"/var/log/audit/audit.log" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/audit/audit.log"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **File Access Events** | `_index:"Linux" AND log.file.path:"/var/log/audit/audit.log" AND auditd.log.record_type:"PATH" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/audit/audit.log"}},{"term":{"auditd.log.record_type":"PATH"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **System Call Audits** | `_index:"Linux" AND log.file.path:"/var/log/audit/audit.log" AND auditd.log.record_type:"SYSCALL" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/audit/audit.log"}},{"term":{"auditd.log.record_type":"SYSCALL"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **User Authentication** | `_index:"Linux" AND log.file.path:"/var/log/audit/audit.log" AND auditd.log.record_type:("USER_AUTH" OR "USER_ACCT" OR "USER_LOGIN") AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/audit/audit.log"}},{"terms":{"auditd.log.record_type":["USER_AUTH","USER_ACCT","USER_LOGIN"]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Privilege Escalation** | `_index:"Linux" AND log.file.path:"/var/log/audit/audit.log" AND auditd.log.record_type:("USER_ROLE_CHANGE" OR "USER_CMD") AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/audit/audit.log"}},{"terms":{"auditd.log.record_type":["USER_ROLE_CHANGE","USER_CMD"]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Failed Audit Events** | `_index:"Linux" AND log.file.path:"/var/log/audit/audit.log" AND auditd.log.success:"no" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/audit/audit.log"}},{"term":{"auditd.log.success":"no"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Configuration Changes** | `_index:"Linux" AND log.file.path:"/var/log/audit/audit.log" AND auditd.log.record_type:("CONFIG_CHANGE" OR "SERVICE_START" OR "SERVICE_STOP") AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/audit/audit.log"}},{"terms":{"auditd.log.record_type":["CONFIG_CHANGE","SERVICE_START","SERVICE_STOP"]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **SELinux Events** | `_index:"Linux" AND log.file.path:"/var/log/audit/audit.log" AND auditd.log.record_type:("AVC" OR "SELINUX_ERR") AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/audit/audit.log"}},{"terms":{"auditd.log.record_type":["AVC","SELINUX_ERR"]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+## Application-Specific Log Entries
+
+### Apache HTTP Server Logs
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **Apache Access Log** | `_index:"Linux" AND log.file.path:"/var/log/httpd/access_log" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/httpd/access_log"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Apache Error Log** | `_index:"Linux" AND log.file.path:"/var/log/httpd/error_log" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/httpd/error_log"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Apache 4xx Errors** | `_index:"Linux" AND log.file.path:"/var/log/httpd/access_log" AND http.response.status_code:[400 TO 499] AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/httpd/access_log"}},{"range":{"http.response.status_code":{"gte":400,"lte":499}}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Apache 5xx Errors** | `_index:"Linux" AND log.file.path:"/var/log/httpd/access_log" AND http.response.status_code:[500 TO 599] AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/httpd/access_log"}},{"range":{"http.response.status_code":{"gte":500,"lte":599}}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+### MySQL/MariaDB Logs
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **MySQL Error Log** | `_index:"Linux" AND log.file.path:"/var/log/mysqld.log" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/mysqld.log"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **MySQL Slow Query Log** | `_index:"Linux" AND log.file.path:"/var/log/mysql-slow.log" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/mysql-slow.log"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **MySQL Connection Events** | `_index:"Linux" AND log.file.path:"/var/log/mysqld.log" AND (message:("Connect" OR "connection")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"log.file.path":"/var/log/mysqld.log"}},{"bool":{"should":[{"match":{"message":"Connect"}},{"match":{"message":"connection"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+### Firewall Logs (firewalld)
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **Firewall Denied Connections** | `_index:"Linux" AND (log.file.path:"/var/log/messages" OR systemd.transport:*) AND process.name:"firewalld" AND (message:("REJECT" OR "DROP")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"bool":{"should":[{"term":{"log.file.path":"/var/log/messages"}},{"exists":{"field":"systemd.transport"}}]}},{"term":{"process.name":"firewalld"}},{"bool":{"should":[{"match":{"message":"REJECT"}},{"match":{"message":"DROP"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Firewall Rule Changes** | `_index:"Linux" AND (log.file.path:"/var/log/messages" OR systemd.transport:*) AND process.name:"firewalld" AND (message:("rule" OR "zone")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"bool":{"should":[{"term":{"log.file.path":"/var/log/messages"}},{"exists":{"field":"systemd.transport"}}]}},{"term":{"process.name":"firewalld"}},{"bool":{"should":[{"match":{"message":"rule"}},{"match":{"message":"zone"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+## Performance and Resource Monitoring
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **High CPU Usage Alerts** | `_index:"Linux" AND (log.file.path:"/var/log/messages" OR systemd.transport:*) AND (message:("CPU" OR "load average")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"bool":{"should":[{"term":{"log.file.path":"/var/log/messages"}},{"exists":{"field":"systemd.transport"}}]}},{"bool":{"should":[{"match":{"message":"CPU"}},{"match":{"message":"load average"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Disk Space Warnings** | `_index:"Linux" AND (log.file.path:"/var/log/messages" OR systemd.transport:*) AND (message:("disk full" OR "No space left" OR "filesystem full")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"bool":{"should":[{"term":{"log.file.path":"/var/log/messages"}},{"exists":{"field":"systemd.transport"}}]}},{"bool":{"should":[{"match":{"message":"disk full"}},{"match":{"message":"No space left"}},{"match":{"message":"filesystem full"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Service Restart Events** | `_index:"Linux" AND (log.file.path:"/var/log/messages" OR systemd.transport:*) AND (message:("restarted" OR "restart" OR "reloaded")) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"bool":{"should":[{"term":{"log.file.path":"/var/log/messages"}},{"exists":{"field":"systemd.transport"}}]}},{"bool":{"should":[{"match":{"message":"restarted"}},{"match":{"message":"restart"}},{"match":{"message":"reloaded"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+## Container Logs (Podman/Docker)
+
+| Log Type | Kibana Query Bar | Elasticsearch Query DSL |
+|----------|------------------|--------------------------|
+| **Podman Container Events** | `_index:"Linux" AND (log.file.path:"/var/log/messages" OR systemd.transport:*) AND (process.name:"podman" OR message:"podman") AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"bool":{"should":[{"term":{"log.file.path":"/var/log/messages"}},{"exists":{"field":"systemd.transport"}}]}},{"bool":{"should":[{"term":{"process.name":"podman"}},{"match":{"message":"podman"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+| **Container Start/Stop** | `_index:"Linux" AND (log.file.path:"/var/log/messages" OR systemd.transport:*) AND (message:"container" AND (message:("started" OR "stopped"))) AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"bool":{"should":[{"term":{"log.file.path":"/var/log/messages"}},{"exists":{"field":"systemd.transport"}}]}},{"match":{"message":"container"}},{"bool":{"should":[{"match":{"message":"started"}},{"match":{"message":"stopped"}}]}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Linux"}}]}}}` |
+
+## Summary and Analysis Queries
+
+### Top Error Sources (Kibana)
+```
+_index:"Linux" AND (log.syslog.priority:(0 OR 1 OR 2 OR 3)) AND @timestamp:[now-14d TO now]
+```
+**Visualization**: Terms aggregation on `process.name` field
+
+### Top Error Sources (Elasticsearch Query DSL)
+```json
+{
+  "query": {
+    "bool": {
+      "must": [
+        {"terms": {"log.syslog.priority": ["0", "1", "2", "3"]}},
+        {"range": {"@timestamp": {"gte": "now-14d", "lte": "now"}}}
+      ],
+      "filter": [
+        {"term": {"_index": "Linux"}}
+      ]
+    }
+  },
+  "aggs": {
+    "top_error_sources": {
+      "terms": {
+        "field": "process.name.keyword",
+        "size": 20
+      }
+    }
+  }
+}
+```
+
+### Daily Log Volume Trend (Kibana)
+```
+_index:"Linux" AND @timestamp:[now-14d TO now]
+```
+**Visualization**: Date histogram on `@timestamp` with terms sub-aggregation on `log.syslog.priority`
+
+### Daily Log Volume Trend (Elasticsearch Query DSL)
+```json
+{
+  "query": {
+    "bool": {
+      "must": [
+        {"range": {"@timestamp": {"gte": "now-14d", "lte": "now"}}}
+      ],
+      "filter": [
+        {"term": {"_index": "Linux"}}
+      ]
+    }
+  },
+  "aggs": {
+    "daily_volume": {
+      "date_histogram": {
+        "field": "@timestamp",
+        "calendar_interval": "1d"
+      },
+      "aggs": {
+        "by_priority": {
+          "terms": {
+            "field": "log.syslog.priority"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### SSH Authentication Analysis (Kibana)
+```
+_index:"Linux" AND log.file.path:"/var/log/secure" AND process.name:"sshd" AND @timestamp:[now-14d TO now]
+```
+
+### SSH Authentication Analysis (Elasticsearch Query DSL)
+```json
+{
+  "query": {
+    "bool": {
+      "must": [
+        {"term": {"log.file.path": "/var/log/secure"}},
+        {"term": {"process.name": "sshd"}},
+        {"range": {"@timestamp": {"gte": "now-14d", "lte": "now"}}}
+      ],
+      "filter": [
+        {"term": {"_index": "Linux"}}
+      ]
+    }
+  },
+  "aggs": {
+    "ssh_events": {
+      "terms": {
+        "field": "message.keyword",
+        "include": ".*(Accepted|Failed).*",
+        "size": 10
+      },
+      "aggs": {
+        "by_user": {
+          "terms": {
+            "field": "user.name.keyword",
+            "size": 10
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### System Resource Alerts (Kibana)
+```
+_index:"Linux" AND (message:("Out of memory" OR "disk full" OR "CPU" OR "load average")) AND @timestamp:[now-14d TO now]
+```
+
+### System Resource Alerts (Elasticsearch Query DSL)
+```json
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "bool": {
+            "should": [
+              {"match": {"message": "Out of memory"}},
+              {"match": {"message": "disk full"}},
+              {"match": {"message": "CPU"}},
+              {"match": {"message": "load average"}}
+            ]
+          }
+        },
+        {"range": {"@timestamp": {"gte": "now-14d", "lte": "now"}}}
+      ],
+      "filter": [
+        {"term": {"_index": "Linux"}}
+      ]
+    }
+  },
+  "aggs": {
+    "by_host": {
+      "terms": {
+        "field": "host.name.keyword",
+        "size": 20
+      }
+    }
+  }
+}
+```
+
+### Service Failure Analysis (Kibana)
+```
+_index:"Linux" AND (message:("failed" OR "Failed" OR "FAILED")) AND @timestamp:[now-14d TO now]
+```
+
+### Service Failure Analysis (Elasticsearch Query DSL)
+```json
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "bool": {
+            "should": [
+              {"match": {"message": "failed"}},
+              {"match": {"message": "Failed"}},
+              {"match": {"message": "FAILED"}}
+            ]
+          }
+        },
+        {"range": {"@timestamp": {"gte": "now-14d", "lte": "now"}}}
+      ],
+      "filter": [
+        {"term": {"_index": "Linux"}}
+      ]
+    }
+  },
+  "aggs": {
+    "failed_services": {
+      "terms": {
+        "field": "systemd.unit.keyword",
+        "size": 20
+      },
+      "aggs": {
+        "by_host": {
+          "terms": {
+            "field": "host.name.keyword",
+            "size": 10
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Kibana Visualization Examples
+
+### Data Table for Log Analysis
+1. Go to **Visualize Library** → **Create visualization** → **Data table**
+2. Set index pattern to match your Linux logs
+3. Add **Buckets**:
+   - **Split rows**: Terms aggregation on `log.file.path.keyword`
+   - **Split rows**: Terms aggregation on `log.syslog.priority`
+4. Add **Metrics**:
+   - Count
+   - Unique count of `host.name.keyword`
+
+### Timeline Visualization
+1. Create **Line chart** visualization
+2. **X-axis**: Date histogram on `@timestamp`
+3. **Y-axis**: Count
+4. **Split series**: Terms on `log.syslog.priority`
+5. Add filters for specific log files
+
+### Heat Map for User Activity
+1. Create **Heat map** visualization
+2. **X-axis**: Terms on `user.name.keyword`
+3. **Y-axis**: Date histogram on `@timestamp` (hourly)
+4. **Values**: Count
+5. Filter by SSH events from `/var/log/secure`
+
+### Geographic Map for SSH Sources
+1. Create **Maps** visualization
+2. Add layer for **Documents**
+3. Set **Index pattern** to Linux logs
+4. Filter by SSH failed logins
+5. Use `source.geo.location` field for geographic plotting
+
+## Notes
+
+1. **Index Name**: All queries assume the Elasticsearch index is named "Linux". Adjust if your index name is different.
+
+2. **Time Range**: `now-14d` searches from 14 days ago to now. Adjust as needed.
+
+3. **Field Names**: Field names follow ECS (Elastic Common Schema) where possible:
+   - `@timestamp` for log timestamp
+   - `host.name` for hostname
+   - `user.name` for username
+   - `log.file.path` for log file location
+   - `process.name` for process/program name
+   - `log.syslog.priority` for syslog priority level
+   - `systemd.transport` for systemd journal transport
+   - `message` for log message content
+
+4. **Performance**: For large datasets, consider:
+   - Using index patterns with date-based indices
+   - Adding more specific filters
+   - Limiting aggregation size
+   - Using keyword fields for exact matches
+
+5. **Custom Fields**: You may need to create custom field mappings based on your log parsing configuration.
+
+6. **Syslog Facilities**: Map numeric facility codes to meaningful names in your index templates.
+
+7. **Time Zones**: Elasticsearch stores timestamps in UTC. Kibana displays them in browser timezone by default.
