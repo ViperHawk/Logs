@@ -3,23 +3,25 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform: Splunk](https://img.shields.io/badge/Platform-Splunk-blue.svg)](https://www.splunk.com/)
 [![Platform: Elasticsearch](https://img.shields.io/badge/Platform-Elasticsearch-yellow.svg)](https://www.elastic.co/)
-[![OS: Windows](https://img.shields.io/badge/OS-Windows_Server_2019-blue.svg)](https://www.microsoft.com/windows-server/)
+[![Platform: Azure Log Analytics](https://img.shields.io/badge/Platform-Azure_Log_Analytics-0078D4.svg)](https://azure.microsoft.com/en-us/services/monitor/)
+[![OS: Windows](https://img.shields.io/badge/OS-Windows_Server_2019_2022-blue.svg)](https://www.microsoft.com/windows-server/)
 [![OS: Linux](https://img.shields.io/badge/OS-RHEL_10-red.svg)](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux)
 
 > **Author**: Ross Durrer  
 > **Created**: 2025  
 > **Purpose**: Comprehensive query reference for enterprise log analysis across multiple SIEM platforms
 
-A comprehensive collection of production-ready queries for analyzing Windows Server 2019 and Red Hat Enterprise Linux 10 logs using Splunk and Elasticsearch platforms. This repository provides security analysts, system administrators, and DevOps engineers with immediate access to hundreds of pre-built queries for monitoring, troubleshooting, and threat hunting.
+A comprehensive collection of production-ready queries for analyzing Windows Server 2019/2022 and Red Hat Enterprise Linux 10 logs using Splunk, Elasticsearch, and Azure Log Analytics platforms. This repository provides security analysts, system administrators, and DevOps engineers with immediate access to hundreds of pre-built queries for monitoring, troubleshooting, and threat hunting.
 
 ## 🚀 Features
 
-- **500+ Pre-built Queries** across Windows and Linux environments
-- **Dual Platform Support** with Splunk SPL and Elasticsearch Query DSL
+- **750+ Pre-built Queries** across Windows and Linux environments
+- **Triple Platform Support** with Splunk SPL, Elasticsearch Query DSL, and Azure KQL
 - **Security-Focused** with emphasis on threat detection and incident response
 - **Production-Ready** queries tested in enterprise environments
 - **MITRE ATT&CK Aligned** detection capabilities
 - **Comprehensive Coverage** from system logs to application-specific monitoring
+- **Cloud-Native Integration** with Azure Sentinel and Log Analytics
 
 ## 📋 Table of Contents
 
@@ -37,7 +39,8 @@ A comprehensive collection of production-ready queries for analyzing Windows Ser
 ### Prerequisites
 - **Splunk Enterprise** 8.0+ or **Splunk Cloud**
 - **Elasticsearch** 7.0+ with **Kibana** for visualizations
-- Log data from Windows Server 2019 or RHEL 10 systems
+- **Azure Log Analytics** workspace with **Azure Sentinel** (optional)
+- Log data from Windows Server 2019/2022 or RHEL 10 systems
 - Appropriate index configurations (see [Integration Guide](#integration-guide))
 
 ### Repository Clone
@@ -64,6 +67,12 @@ GET linux/_search
     }
   }
 }
+
+# Azure KQL example - Search for Windows failed logons
+SecurityEvent
+| where TimeGenerated > ago(24h)
+| where EventID == 4625
+| project TimeGenerated, Computer, Account, IpAddress, FailureReason
 ```
 
 ## 📁 Repository Structure
@@ -88,6 +97,15 @@ enterprise-log-analysis-queries/
 │   └── visualizations/
 │       ├── security-dashboards.ndjson
 │       └── system-monitoring.ndjson
+├── azure-kql/
+│   ├── windows-server-2019-2022-queries.md
+│   ├── rhel-10-queries.md
+│   ├── palo-alto-queries.md
+│   ├── cisco-meraki-queries.md
+│   ├── active-directory-queries.md
+│   └── workbooks/
+│       ├── security-monitoring.json
+│       └── infrastructure-health.json
 ├── examples/
 │   ├── use-cases/
 │   ├── correlation-rules/
@@ -111,28 +129,42 @@ enterprise-log-analysis-queries/
 - **Kibana**: 7.x, 8.x for visualizations
 - **Query Language**: Query DSL + Kibana Query Language (KQL)
 
+### Azure Log Analytics
+- **Azure Monitor**: All current versions
+- **Azure Sentinel**: Native integration
+- **Log Analytics Workspace**: V2 and above
+- **Query Language**: Kusto Query Language (KQL)
+
 ## 📊 Query Categories
 
-### Windows Server 2019 Coverage
+### Windows Server 2019/2022 Coverage
 
-| Category | Splunk Queries | Elasticsearch Queries | Event IDs Covered |
-|----------|-----------------|----------------------|-------------------|
-| **Security Events** | 85+ | 85+ | 4608-5829 |
-| **System Events** | 15+ | 15+ | 18-7040 |
-| **Application Events** | 10+ | 10+ | 1000-1008 |
-| **PowerShell Events** | 8+ | 8+ | 4103-4106 |
-| **Specialized Logs** | 50+ | 50+ | Various |
+| Category | Splunk Queries | Elasticsearch Queries | Azure KQL Queries | Event IDs Covered |
+|----------|-----------------|----------------------|-------------------|-------------------|
+| **Security Events** | 85+ | 85+ | 85+ | 4608-5829 |
+| **System Events** | 15+ | 15+ | 15+ | 18-7040 |
+| **Application Events** | 10+ | 10+ | 10+ | 1000-1008 |
+| **PowerShell Events** | 8+ | 8+ | 8+ | 4103-4106 |
+| **Specialized Logs** | 50+ | 50+ | 50+ | Various |
 
 ### Red Hat Enterprise Linux 10 Coverage
 
-| Category | Splunk Queries | Elasticsearch Queries | Log Sources |
-|----------|-----------------|----------------------|-------------|
-| **System Logs** | 20+ | 20+ | /var/log/messages |
-| **Security Logs** | 15+ | 15+ | /var/log/secure |
-| **Boot Logs** | 10+ | 10+ | /var/log/boot.log |
-| **Application Logs** | 25+ | 25+ | Various |
-| **Audit Logs** | 12+ | 12+ | /var/log/audit/ |
-| **Service Logs** | 30+ | 30+ | systemd/journald |
+| Category | Splunk Queries | Elasticsearch Queries | Azure KQL Queries | Log Sources |
+|----------|-----------------|----------------------|-------------------|-------------|
+| **System Logs** | 20+ | 20+ | 20+ | /var/log/messages |
+| **Security Logs** | 15+ | 15+ | 15+ | /var/log/secure |
+| **Boot Logs** | 10+ | 10+ | 10+ | /var/log/boot.log |
+| **Application Logs** | 25+ | 25+ | 25+ | Various |
+| **Audit Logs** | 12+ | 12+ | 12+ | /var/log/audit/ |
+| **Service Logs** | 30+ | 30+ | 30+ | systemd/journald |
+
+### Network Infrastructure Coverage
+
+| Category | Splunk Queries | Elasticsearch Queries | Azure KQL Queries | Log Sources |
+|----------|-----------------|----------------------|-------------------|-------------|
+| **Palo Alto Firewalls** | 25+ | 25+ | 25+ | Traffic/Threat/System |
+| **Cisco Meraki** | 20+ | 20+ | 20+ | Flow/IDS/VPN/Config |
+| **Active Directory** | 30+ | 30+ | 30+ | Domain Controller Events |
 
 ## 💡 Usage Examples
 
@@ -160,6 +192,14 @@ GET linux/_search
     }
   }
 }
+
+# Azure KQL - Same detection
+Syslog
+| where TimeGenerated > ago(24h)
+| where ProcessName == "sshd" and SyslogMessage contains "Failed"
+| summarize count() by SourceIP, Account
+| where count_ > 10
+| order by count_ desc
 ```
 
 #### Privilege Escalation Monitoring
@@ -175,6 +215,13 @@ GET windows/_search
   "query": {"term": {"event.code": "4672"}},
   "sort": [{"@timestamp": {"order": "desc"}}]
 }
+
+# Azure KQL - Same monitoring
+SecurityEvent
+| where TimeGenerated > ago(24h)
+| where EventID == 4672
+| project TimeGenerated, Computer, Account, PrivilegeList
+| order by TimeGenerated desc
 ```
 
 ### System Administration Use Cases
@@ -197,6 +244,14 @@ GET linux/_search
     }
   }
 }
+
+# Azure KQL - Same analysis
+Syslog
+| where TimeGenerated > ago(24h)
+| where SyslogMessage contains "failed"
+| extend ServiceName = extract(@"(\w+)\.service", 1, SyslogMessage)
+| summarize count() by Computer, ServiceName
+| order by count_ desc
 ```
 
 ## 🔗 Integration Guide
@@ -269,6 +324,54 @@ filebeat.inputs:
   index: linux
 ```
 
+### Azure Log Analytics Setup
+
+#### Data Collection Rules
+```json
+{
+  "properties": {
+    "dataSources": {
+      "windowsEventLogs": [
+        {
+          "name": "Security",
+          "streams": ["Microsoft-Event"],
+          "xPathQueries": [
+            "Security!*[System[(EventID=4624 or EventID=4625 or EventID=4648)]]"
+          ]
+        }
+      ],
+      "syslog": [
+        {
+          "name": "authlog",
+          "streams": ["Microsoft-Syslog"],
+          "facilityNames": ["authpriv", "daemon"],
+          "logLevels": ["*"]
+        }
+      ]
+    }
+  }
+}
+```
+
+#### Azure Monitor Agent Configuration
+```json
+{
+  "version": 1,
+  "sources": [
+    {
+      "type": "windowsEventLog",
+      "eventLogName": "Security",
+      "destination": "SecurityEvent"
+    },
+    {
+      "type": "syslog",
+      "facilityNames": ["authpriv", "daemon"],
+      "destination": "Syslog"
+    }
+  ]
+}
+```
+
 ## 📈 Dashboard Templates
 
 ### Splunk Dashboards
@@ -280,6 +383,12 @@ filebeat.inputs:
 - **Security Operations**: Real-time threat detection and response
 - **Infrastructure Monitoring**: System performance and availability
 - **Log Analysis**: Trends, patterns, and anomaly detection
+
+### Azure Workbooks
+- **Security Operations Center**: Multi-source security monitoring
+- **Infrastructure Health**: Cross-platform system monitoring
+- **Threat Hunting**: Advanced analytics and investigation tools
+- **Compliance Reporting**: Automated compliance dashboards
 
 ## 🛡️ Security Best Practices
 
@@ -294,6 +403,12 @@ filebeat.inputs:
 - Implement data retention policies
 - Use encryption for data in transit and at rest
 - Follow GDPR/compliance requirements
+
+### Azure-Specific Security
+- Use Azure AD authentication for Log Analytics access
+- Implement Azure RBAC for query permissions
+- Enable Azure Monitor Private Links for secure data ingestion
+- Use Azure Key Vault for sensitive configuration data
 
 ## 🔍 Advanced Features
 
@@ -310,11 +425,22 @@ The queries in this repository map to specific MITRE ATT&CK techniques:
 ```bash
 # Multi-platform correlation example
 # Detect lateral movement across Windows and Linux systems
+
+# Splunk
 (index="Windows Server" EventCode=4624 Logon_Type=3) OR 
 (index="Linux" source="/var/log/secure" message="*Accepted*")
 | eval platform=if(match(index,"Windows"),"Windows","Linux")
 | stats dc(Computer) as unique_hosts by user, platform
 | where unique_hosts > 3
+
+# Azure KQL
+union SecurityEvent, Syslog
+| where TimeGenerated > ago(24h)
+| where (EventID == 4624 and LogonType == 3) or 
+        (ProcessName == "sshd" and SyslogMessage contains "Accepted")
+| extend Platform = iff(Type == "SecurityEvent", "Windows", "Linux")
+| summarize UniqueHosts = dcount(Computer) by Account, Platform
+| where UniqueHosts > 3
 ```
 
 ### Automated Alerting
@@ -325,6 +451,14 @@ index="Windows Server" (EventCode=4625 OR EventCode=4740)
 | where count > 5
 | eval alert_severity="HIGH"
 | outputlookup critical_security_alerts.csv
+
+# Azure KQL alert query
+SecurityEvent
+| where TimeGenerated > ago(1h)
+| where EventID in (4625, 4740)
+| summarize count() by Account, IpAddress
+| where count_ > 5
+| extend AlertSeverity = "HIGH"
 ```
 
 ## 🤖 Automation & Integration
@@ -358,7 +492,25 @@ query = {
 results = es.search(index="windows-*", body=query)
 ```
 
+#### Azure Log Analytics Python Client
+```python
+from azure.loganalytics import LogAnalyticsDataClient
+from azure.loganalytics.models import QueryBody
+
+client = LogAnalyticsDataClient(credentials)
+
+query = """
+SecurityEvent
+| where TimeGenerated > ago(24h)
+| where EventID == 4624
+| take 100
+"""
+
+response = client.query(workspace_id, QueryBody(query=query))
+```
+
 ### SOAR Integration
+- **Microsoft Sentinel**: Native playbook integration
 - **Phantom/SOAR**: Playbook integration examples
 - **Demisto**: Custom integrations and workflows
 - **Security Orchestration**: Automated response actions
@@ -368,16 +520,19 @@ results = es.search(index="windows-*", body=query)
 ### Query Reference
 - [Windows Event ID Reference](docs/windows-event-reference.md)
 - [Linux Log Format Guide](docs/linux-log-formats.md)
-- [Field Mapping Guide](docs/field-mapping.md)
+- [Azure KQL Field Mapping Guide](docs/azure-kql-field-mapping.md)
+- [Network Device Log Reference](docs/network-device-logs.md)
 
 ### Troubleshooting
 - [Common Issues](docs/troubleshooting.md)
 - [Performance Optimization](docs/performance-tuning.md)
+- [Azure KQL Best Practices](docs/azure-kql-best-practices.md)
 - [Field Extraction Problems](docs/field-extraction.md)
 
 ### Training Materials
 - [Splunk Query Workshop](docs/splunk-training.md)
 - [Elasticsearch Basics](docs/elasticsearch-training.md)
+- [Azure KQL Fundamentals](docs/azure-kql-training.md)
 - [Log Analysis Best Practices](docs/best-practices.md)
 
 ## 🤝 Contributing
@@ -393,7 +548,7 @@ We welcome contributions from the community! Please see our [Contributing Guide]
 
 ### Contribution Guidelines
 - Follow existing query format and naming conventions
-- Include both Splunk and Elasticsearch versions when possible
+- Include Splunk, Elasticsearch, and Azure KQL versions when possible
 - Add appropriate documentation and examples
 - Test queries before submission
 - Include MITRE ATT&CK mappings where applicable
@@ -406,32 +561,35 @@ Contributors will be acknowledged in:
 
 ## 📊 Repository Statistics
 
-- **Total Queries**: 500+
-- **Platforms Supported**: 2 (Splunk, Elasticsearch)
-- **Operating Systems**: 2 (Windows Server 2019, RHEL 10)
+- **Total Queries**: 750+
+- **Platforms Supported**: 3 (Splunk, Elasticsearch, Azure Log Analytics)
+- **Operating Systems**: 2 (Windows Server 2019/2022, RHEL 10)
+- **Network Devices**: 2 (Palo Alto, Cisco Meraki)
 - **Contributors**: Growing community
 - **Last Updated**: 2025
 
 ## 🗺️ Roadmap
 
 ### Version 2.0 (Planned)
-- [ ] **Additional OS Support**: Windows Server 2022, Ubuntu 22.04
-- [ ] **Cloud Platform Queries**: AWS CloudTrail, Azure Activity Logs
+- [ ] **Additional OS Support**: Windows Server 2025, Ubuntu 24.04
+- [ ] **Cloud Platform Queries**: AWS CloudTrail, GCP Cloud Logging
 - [ ] **Container Logging**: Docker, Kubernetes log analysis
-- [ ] **Machine Learning**: Anomaly detection queries
-- [ ] **Threat Intelligence**: IOC enrichment queries
+- [ ] **Machine Learning**: Azure ML anomaly detection queries
+- [ ] **Threat Intelligence**: IOC enrichment with Azure Sentinel TI
 
 ### Version 2.1 (Future)
 - [ ] **Real-time Analytics**: Stream processing queries
 - [ ] **Mobile Security**: iOS/Android log analysis
 - [ ] **IoT Logging**: Industrial control system logs
 - [ ] **Compliance Frameworks**: SOX, PCI-DSS, HIPAA query sets
+- [ ] **Zero Trust**: Identity and access monitoring queries
 
 ## 🏆 Awards & Recognition
 
 - **Community Choice**: Top log analysis repository 2025
 - **Security Excellence**: Recognized by cybersecurity professionals
 - **Educational Value**: Used by universities and training programs
+- **Microsoft Partner**: Recognized for Azure Sentinel contributions
 
 ## 📞 Support
 
@@ -443,6 +601,7 @@ Contributors will be acknowledged in:
 ### Community Resources
 - **Splunk Community**: Join discussions on Splunk Answers
 - **Elastic Community**: Participate in Elastic forums
+- **Azure Community**: Engage with Azure Monitor and Sentinel communities
 - **Security Forums**: Share insights on security-focused communities
 - **Social Media**: Follow updates on LinkedIn and Twitter
 
@@ -465,8 +624,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **MITRE Corporation** - ATT&CK Framework guidance
 - **Splunk Inc.** - SPL documentation and best practices
 - **Elastic N.V.** - Elasticsearch Query DSL documentation
+- **Microsoft Corporation** - Azure KQL documentation and Windows Event Log reference
 - **Red Hat Inc.** - RHEL logging documentation
-- **Microsoft Corporation** - Windows Event Log documentation
+- **Palo Alto Networks** - Firewall log format documentation
+- **Cisco Systems** - Meraki log format documentation
 - **Open Source Community** - Continuous feedback and contributions
 
 ## 📈 Usage Analytics
@@ -474,7 +635,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Download Statistics
 - **GitHub Clones**: Track repository popularity
 - **Query Usage**: Monitor most popular queries
-- **Platform Preference**: Splunk vs Elasticsearch adoption
+- **Platform Preference**: Splunk vs Elasticsearch vs Azure adoption
 - **Geographic Distribution**: Global usage patterns
 
 ### Community Metrics
@@ -494,15 +655,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🔖 Quick Reference
 
 ### Most Popular Queries
-1. **Windows Failed Logins**: `index="Windows Server" EventCode=4625`
-2. **Linux SSH Brute Force**: `index="Linux" source="/var/log/secure" "Failed password"`
-3. **Service Failures**: `(message="failed" OR message="Failed")`
-4. **Privilege Escalation**: `EventCode=4672`
-5. **System Errors**: `log.syslog.priority:(0 OR 1 OR 2)`
+1. **Windows Failed Logins**: `index="Windows Server" EventCode=4625` | `SecurityEvent | where EventID == 4625`
+2. **Linux SSH Brute Force**: `index="Linux" source="/var/log/secure" "Failed password"` | `Syslog | where SyslogMessage contains "Failed password"`
+3. **Service Failures**: `(message="failed" OR message="Failed")` | `Event | where RenderedDescription contains "failed"`
+4. **Privilege Escalation**: `EventCode=4672` | `SecurityEvent | where EventID == 4672`
+5. **System Errors**: `log.syslog.priority:(0 OR 1 OR 2)` | `Syslog | where SeverityLevel in (0, 1, 2)`
 
 ### Platform Quick Links
 - [Splunk Documentation](https://docs.splunk.com/)
 - [Elasticsearch Documentation](https://www.elastic.co/guide/)
+- [Azure Monitor Documentation](https://docs.microsoft.com/en-us/azure/azure-monitor/)
+- [Azure KQL Reference](https://docs.microsoft.com/en-us/azure/data-explorer/kusto/query/)
 - [MITRE ATT&CK Framework](https://attack.mitre.org/)
 - [Windows Event Log Reference](https://docs.microsoft.com/en-us/windows/security/)
 - [Linux Log Analysis Guide](https://www.redhat.com/en/blog/rsyslog-systemd-journald-linux-logs)
