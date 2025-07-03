@@ -1,0 +1,360 @@
+# Windows Server 2019 Event ID Splunk Queries
+**Author: Ross Durrer**  
+**Created: 2025**
+
+This document contains SPL queries for Windows Server 2019 event IDs, designed to search for events over a two-week period and display results in table format.
+
+## Security Event IDs (Security Log)
+
+| EventID | Query |
+|---------|-------|
+| 1102 | `index="Windows Server" EventCode=1102 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, User \| sort -_time` |
+| 4608 | `index="Windows Server" EventCode=4608 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Account_Name \| sort -_time` |
+| 4609 | `index="Windows Server" EventCode=4609 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Account_Name \| sort -_time` |
+| 4610 | `index="Windows Server" EventCode=4610 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Package_Name \| sort -_time` |
+| 4611 | `index="Windows Server" EventCode=4611 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Process_Name \| sort -_time` |
+| 4612 | `index="Windows Server" EventCode=4612 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Account_Name \| sort -_time` |
+| 4614 | `index="Windows Server" EventCode=4614 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Package_Name \| sort -_time` |
+| 4615 | `index="Windows Server" EventCode=4615 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Process_Name \| sort -_time` |
+| 4616 | `index="Windows Server" EventCode=4616 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, New_Time, Previous_Time \| sort -_time` |
+| 4618 | `index="Windows Server" EventCode=4618 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Event_Log_Type \| sort -_time` |
+| 4624 | `index="Windows Server" EventCode=4624 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Logon_Type, Source_Network_Address, Workstation_Name \| sort -_time` |
+| 4625 | `index="Windows Server" EventCode=4625 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Failure_Reason, Source_Network_Address, Workstation_Name \| sort -_time` |
+| 4634 | `index="Windows Server" EventCode=4634 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Logon_ID, Logon_Type \| sort -_time` |
+| 4647 | `index="Windows Server" EventCode=4647 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Logon_ID \| sort -_time` |
+| 4648 | `index="Windows Server" EventCode=4648 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Target_Account_Name, Target_Server_Name, Process_Name \| sort -_time` |
+| 4649 | `index="Windows Server" EventCode=4649 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Logon_Process_Name \| sort -_time` |
+| 4672 | `index="Windows Server" EventCode=4672 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Privileges \| sort -_time` |
+| 4688 | `index="Windows Server" EventCode=4688 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Process_Name, Process_Command_Line, Parent_Process_Name \| sort -_time` |
+| 4689 | `index="Windows Server" EventCode=4689 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Process_Name, Process_ID, Exit_Status \| sort -_time` |
+| 4697 | `index="Windows Server" EventCode=4697 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Service_Name, Service_File_Name, Service_Type \| sort -_time` |
+| 4698 | `index="Windows Server" EventCode=4698 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Task_Name, Task_Content \| sort -_time` |
+| 4699 | `index="Windows Server" EventCode=4699 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Task_Name \| sort -_time` |
+| 4700 | `index="Windows Server" EventCode=4700 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Task_Name \| sort -_time` |
+| 4701 | `index="Windows Server" EventCode=4701 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Task_Name \| sort -_time` |
+| 4702 | `index="Windows Server" EventCode=4702 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Task_Name, Task_Content \| sort -_time` |
+| 4719 | `index="Windows Server" EventCode=4719 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Category, Subcategory, Audit_Policy_Changes \| sort -_time` |
+| 4720 | `index="Windows Server" EventCode=4720 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, New_Account_Name, New_Account_Domain \| sort -_time` |
+| 4722 | `index="Windows Server" EventCode=4722 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Target_Account_Name, Target_Account_Domain \| sort -_time` |
+| 4723 | `index="Windows Server" EventCode=4723 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Target_Account_Name, Target_Account_Domain \| sort -_time` |
+| 4724 | `index="Windows Server" EventCode=4724 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Target_Account_Name, Target_Account_Domain \| sort -_time` |
+| 4725 | `index="Windows Server" EventCode=4725 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Target_Account_Name, Target_Account_Domain \| sort -_time` |
+| 4726 | `index="Windows Server" EventCode=4726 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Target_Account_Name, Target_Account_Domain \| sort -_time` |
+| 4727 | `index="Windows Server" EventCode=4727 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4728 | `index="Windows Server" EventCode=4728 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Member_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4729 | `index="Windows Server" EventCode=4729 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Member_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4730 | `index="Windows Server" EventCode=4730 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4731 | `index="Windows Server" EventCode=4731 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4732 | `index="Windows Server" EventCode=4732 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Member_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4733 | `index="Windows Server" EventCode=4733 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Member_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4734 | `index="Windows Server" EventCode=4734 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4735 | `index="Windows Server" EventCode=4735 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4738 | `index="Windows Server" EventCode=4738 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Target_Account_Name, Target_Account_Domain, Changed_Attributes \| sort -_time` |
+| 4740 | `index="Windows Server" EventCode=4740 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Target_Account_Name, Target_Account_Domain, Caller_Computer_Name \| sort -_time` |
+| 4741 | `index="Windows Server" EventCode=4741 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Computer_Account_Name, Computer_Account_Domain \| sort -_time` |
+| 4742 | `index="Windows Server" EventCode=4742 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Computer_Account_Name, Computer_Account_Domain, Changed_Attributes \| sort -_time` |
+| 4743 | `index="Windows Server" EventCode=4743 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Computer_Account_Name, Computer_Account_Domain \| sort -_time` |
+| 4756 | `index="Windows Server" EventCode=4756 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Member_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4757 | `index="Windows Server" EventCode=4757 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Member_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4758 | `index="Windows Server" EventCode=4758 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4759 | `index="Windows Server" EventCode=4759 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Group_Name, Group_Domain \| sort -_time` |
+| 4768 | `index="Windows Server" EventCode=4768 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Client_Address, Service_Name \| sort -_time` |
+| 4769 | `index="Windows Server" EventCode=4769 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Client_Address, Service_Name \| sort -_time` |
+| 4770 | `index="Windows Server" EventCode=4770 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Service_Name \| sort -_time` |
+| 4771 | `index="Windows Server" EventCode=4771 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Client_Address, Failure_Code \| sort -_time` |
+| 4772 | `index="Windows Server" EventCode=4772 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Failure_Code \| sort -_time` |
+| 4773 | `index="Windows Server" EventCode=4773 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Failure_Code \| sort -_time` |
+| 4774 | `index="Windows Server" EventCode=4774 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain \| sort -_time` |
+| 4775 | `index="Windows Server" EventCode=4775 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Source_Workstation \| sort -_time` |
+| 4776 | `index="Windows Server" EventCode=4776 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Authentication_Package, Logon_Account, Source_Workstation, Error_Code \| sort -_time` |
+| 4777 | `index="Windows Server" EventCode=4777 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Source_Workstation \| sort -_time` |
+| 4778 | `index="Windows Server" EventCode=4778 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Session_Name, Client_Name, Client_Address \| sort -_time` |
+| 4779 | `index="Windows Server" EventCode=4779 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Session_Name, Client_Name, Client_Address \| sort -_time` |
+| 4798 | `index="Windows Server" EventCode=4798 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Caller_User_Name, Caller_Domain_Name, Target_User_Name, Target_Domain_Name \| sort -_time` |
+| 4799 | `index="Windows Server" EventCode=4799 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Caller_User_Name, Caller_Domain_Name, Target_User_Name, Target_Domain_Name \| sort -_time` |
+| 4800 | `index="Windows Server" EventCode=4800 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Target_User_Name, Target_Domain_Name, Target_User_Sid \| sort -_time` |
+| 4801 | `index="Windows Server" EventCode=4801 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Target_User_Name, Target_Domain_Name, Target_User_Sid \| sort -_time` |
+| 4802 | `index="Windows Server" EventCode=4802 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Target_User_Name, Target_Domain_Name, Target_User_Sid \| sort -_time` |
+| 4803 | `index="Windows Server" EventCode=4803 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Target_User_Name, Target_Domain_Name, Target_User_Sid \| sort -_time` |
+| 4820 | `index="Windows Server" EventCode=4820 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Client_Address, Failure_Code \| sort -_time` |
+| 4821 | `index="Windows Server" EventCode=4821 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Service_Name, Failure_Code \| sort -_time` |
+| 4822 | `index="Windows Server" EventCode=4822 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Authentication_Package \| sort -_time` |
+| 4823 | `index="Windows Server" EventCode=4823 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Authentication_Package \| sort -_time` |
+| 4824 | `index="Windows Server" EventCode=4824 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Account_Domain, Client_Address \| sort -_time` |
+| 5136 | `index="Windows Server" EventCode=5136 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Object_DN, Attribute_Name, New_Value, Old_Value \| sort -_time` |
+| 5137 | `index="Windows Server" EventCode=5137 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Object_DN, Object_Class \| sort -_time` |
+| 5139 | `index="Windows Server" EventCode=5139 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Object_DN, Object_Class \| sort -_time` |
+| 5140 | `index="Windows Server" EventCode=5140 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Object_Name, Share_Name, Source_Address \| sort -_time` |
+| 5141 | `index="Windows Server" EventCode=5141 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Object_DN, Object_Class \| sort -_time` |
+| 5142 | `index="Windows Server" EventCode=5142 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Share_Name, Share_Path \| sort -_time` |
+| 5143 | `index="Windows Server" EventCode=5143 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Share_Name, Share_Path \| sort -_time` |
+| 5144 | `index="Windows Server" EventCode=5144 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Share_Name \| sort -_time` |
+| 5145 | `index="Windows Server" EventCode=5145 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Object_Name, Share_Name, Source_Address, Access_Mask \| sort -_time` |
+| 5827 | `index="Windows Server" EventCode=5827 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Client_Computer_Name, Protocol_Version \| sort -_time` |
+| 5828 | `index="Windows Server" EventCode=5828 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Client_Computer_Name, Protocol_Version \| sort -_time` |
+| 5829 | `index="Windows Server" EventCode=5829 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Account_Name, Client_Computer_Name, Protocol_Version \| sort -_time` |
+
+## System Event IDs (System Log)
+
+| EventID | Query |
+|---------|-------|
+| 18 | `index="Windows Server" EventCode=18 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Source \| sort -_time` |
+| 29 | `index="Windows Server" EventCode=29 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Source \| sort -_time` |
+| 37 | `index="Windows Server" EventCode=37 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Source \| sort -_time` |
+| 38 | `index="Windows Server" EventCode=38 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Source \| sort -_time` |
+| 47 | `index="Windows Server" EventCode=47 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Source \| sort -_time` |
+| 1074 | `index="Windows Server" EventCode=1074 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Process, Reason_Code, Shutdown_Type, Comment \| sort -_time` |
+| 6005 | `index="Windows Server" EventCode=6005 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Source \| sort -_time` |
+| 6006 | `index="Windows Server" EventCode=6006 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Source \| sort -_time` |
+| 6013 | `index="Windows Server" EventCode=6013 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Uptime_Seconds \| sort -_time` |
+| 7034 | `index="Windows Server" EventCode=7034 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Service_Name, Message \| sort -_time` |
+| 7035 | `index="Windows Server" EventCode=7035 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Service_Name, Control_Type, User \| sort -_time` |
+| 7036 | `index="Windows Server" EventCode=7036 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Service_Name, Service_State \| sort -_time` |
+| 7040 | `index="Windows Server" EventCode=7040 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Service_Name, Start_Type_Old, Start_Type_New \| sort -_time` |
+
+## Application Event IDs (Application Log)
+
+| EventID | Query |
+|---------|-------|
+| 1000 | `index="Windows Server" EventCode=1000 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Application_Name, Application_Version, Module_Name, Module_Version, Exception_Code \| sort -_time` |
+| 1001 | `index="Windows Server" EventCode=1001 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Application_Name, Report_Id, Bucket_Id \| sort -_time` |
+| 1002 | `index="Windows Server" EventCode=1002 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Application_Name, Application_Version, Module_Name, Module_Version \| sort -_time` |
+| 1004 | `index="Windows Server" EventCode=1004 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Name \| sort -_time` |
+| 1006 | `index="Windows Server" EventCode=1006 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Name \| sort -_time` |
+| 1008 | `index="Windows Server" EventCode=1008 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Name \| sort -_time` |
+
+## PowerShell Event IDs (PowerShell Log)
+
+| EventID | Query |
+|---------|-------|
+| 4103 | `index="Windows Server" EventCode=4103 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Command_Name, Command_Type, Host_Name, Engine_Version \| sort -_time` |
+| 4104 | `index="Windows Server" EventCode=4104 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Script_Block_Text, Script_Block_ID, Message_Number, Message_Total \| sort -_time` |
+| 4105 | `index="Windows Server" EventCode=4105 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Command_Name, Command_Type, Script_Name \| sort -_time` |
+| 4106 | `index="Windows Server" EventCode=4106 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Command_Name, Command_Type, Script_Name \| sort -_time` |
+
+## DNS Server Event IDs (DNS Server Log)
+
+| EventID | Query |
+|---------|-------|
+| 150 | `index="Windows Server" EventCode=150 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Zone_Name \| sort -_time` |
+| 770 | `index="Windows Server" EventCode=770 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Query_Name, Query_Type, Client_IP \| sort -_time` |
+| 6004 | `index="Windows Server" EventCode=6004 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Status \| sort -_time` |
+
+## Active Directory Event IDs (Directory Service Log)
+
+| EventID | Query |
+|---------|-------|
+| 1644 | `index="Windows Server" EventCode=1644 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Account_Name, Database_Name \| sort -_time` |
+| 2887 | `index="Windows Server" EventCode=2887 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Replication_Partner, Source_DSA \| sort -_time` |
+
+## Task Scheduler Event IDs (Task Scheduler Log)
+
+| EventID | Query |
+|---------|-------|
+| 100 | `index="Windows Server" EventCode=100 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Task_Name, Task_Category, User_Context \| sort -_time` |
+| 101 | `index="Windows Server" EventCode=101 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Task_Name, Task_Category, User_Context \| sort -_time` |
+| 102 | `index="Windows Server" EventCode=102 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Task_Name, Task_Category, User_Context, Result_Code \| sort -_time` |
+| 103 | `index="Windows Server" EventCode=103 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Task_Name, Task_Category, User_Context \| sort -_time` |
+| 107 | `index="Windows Server" EventCode=107 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Task_Name, Task_Category, User_Context \| sort -_time` |
+| 110 | `index="Windows Server" EventCode=110 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Task_Name, Task_Category, User_Context \| sort -_time` |
+| 111 | `index="Windows Server" EventCode=111 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Task_Name, Task_Category, User_Context \| sort -_time` |
+| 117 | `index="Windows Server" EventCode=117 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Task_Name, Task_Category, User_Context \| sort -_time` |
+| 118 | `index="Windows Server" EventCode=118 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Task_Name, Task_Category, User_Context \| sort -_time` |
+| 119 | `index="Windows Server" EventCode=119 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Task_Name, Task_Category, User_Context \| sort -_time` |
+| 200 | `index="Windows Server" EventCode=200 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Task_Name, Action_Name, User_Context \| sort -_time` |
+| 201 | `index="Windows Server" EventCode=201 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Task_Name, Action_Name, User_Context, Result_Code \| sort -_time` |
+
+## Windows Defender Event IDs (Windows Defender Log)
+
+| EventID | Query |
+|---------|-------|
+| 1000 | `index="Windows Server" EventCode=1000 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Product_Version, Detection_User \| sort -_time` |
+| 1001 | `index="Windows Server" EventCode=1001 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Detection_User, Product_Name, Threat_Name, Severity \| sort -_time` |
+| 1002 | `index="Windows Server" EventCode=1002 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Error_Code \| sort -_time` |
+| 1006 | `index="Windows Server" EventCode=1006 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Detection_User \| sort -_time` |
+| 1007 | `index="Windows Server" EventCode=1007 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Detection_User \| sort -_time` |
+| 1008 | `index="Windows Server" EventCode=1008 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Action_Result \| sort -_time` |
+| 1009 | `index="Windows Server" EventCode=1009 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Detection_User \| sort -_time` |
+| 1010 | `index="Windows Server" EventCode=1010 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Detection_User \| sort -_time` |
+| 1011 | `index="Windows Server" EventCode=1011 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Detection_User \| sort -_time` |
+| 1012 | `index="Windows Server" EventCode=1012 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Detection_User \| sort -_time` |
+| 1013 | `index="Windows Server" EventCode=1013 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, History_Type, Detection_User \| sort -_time` |
+| 1015 | `index="Windows Server" EventCode=1015 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Detection_User \| sort -_time` |
+| 1116 | `index="Windows Server" EventCode=1116 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Detection_User, Process_Name \| sort -_time` |
+| 1117 | `index="Windows Server" EventCode=1117 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Detection_User, Process_Name \| sort -_time` |
+| 1118 | `index="Windows Server" EventCode=1118 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Detection_User \| sort -_time` |
+| 1119 | `index="Windows Server" EventCode=1119 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Action_Name, Detection_User \| sort -_time` |
+| 1120 | `index="Windows Server" EventCode=1120 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Severity, Detection_User \| sort -_time` |
+| 1121 | `index="Windows Server" EventCode=1121 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Severity, Detection_User \| sort -_time` |
+| 1122 | `index="Windows Server" EventCode=1122 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Severity, Detection_User \| sort -_time` |
+| 1123 | `index="Windows Server" EventCode=1123 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Severity, Detection_User \| sort -_time` |
+| 1124 | `index="Windows Server" EventCode=1124 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Severity, Detection_User \| sort -_time` |
+| 1125 | `index="Windows Server" EventCode=1125 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Severity, Detection_User \| sort -_time` |
+| 1126 | `index="Windows Server" EventCode=1126 source="*Defender*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Product_Name, Threat_Name, Severity, Detection_User \| sort -_time` |
+
+## Certificate Services Event IDs (Certificate Services Log)
+
+| EventID | Query |
+|---------|-------|
+| 4868 | `index="Windows Server" EventCode=4868 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4869 | `index="Windows Server" EventCode=4869 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4870 | `index="Windows Server" EventCode=4870 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4871 | `index="Windows Server" EventCode=4871 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4872 | `index="Windows Server" EventCode=4872 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4873 | `index="Windows Server" EventCode=4873 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4874 | `index="Windows Server" EventCode=4874 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4875 | `index="Windows Server" EventCode=4875 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4876 | `index="Windows Server" EventCode=4876 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4877 | `index="Windows Server" EventCode=4877 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4878 | `index="Windows Server" EventCode=4878 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4879 | `index="Windows Server" EventCode=4879 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4880 | `index="Windows Server" EventCode=4880 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4881 | `index="Windows Server" EventCode=4881 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4882 | `index="Windows Server" EventCode=4882 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4883 | `index="Windows Server" EventCode=4883 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4884 | `index="Windows Server" EventCode=4884 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4885 | `index="Windows Server" EventCode=4885 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4886 | `index="Windows Server" EventCode=4886 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+| 4887 | `index="Windows Server" EventCode=4887 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Certificate_Template, Request_ID, Requester \| sort -_time` |
+
+## Remote Desktop Services Event IDs (TerminalServices Log)
+
+| EventID | Query |
+|---------|-------|
+| 1149 | `index="Windows Server" EventCode=1149 source="*TerminalServices*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Source_Network_Address \| sort -_time` |
+| 21 | `index="Windows Server" EventCode=21 source="*TerminalServices*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Session_ID \| sort -_time` |
+| 22 | `index="Windows Server" EventCode=22 source="*TerminalServices*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Session_ID \| sort -_time` |
+| 23 | `index="Windows Server" EventCode=23 source="*TerminalServices*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Session_ID, Reason \| sort -_time` |
+| 24 | `index="Windows Server" EventCode=24 source="*TerminalServices*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Session_ID \| sort -_time` |
+| 25 | `index="Windows Server" EventCode=25 source="*TerminalServices*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Session_ID \| sort -_time` |
+| 39 | `index="Windows Server" EventCode=39 source="*TerminalServices*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Session_ID, Source_Network_Address \| sort -_time` |
+| 40 | `index="Windows Server" EventCode=40 source="*TerminalServices*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Session_ID, Source_Network_Address \| sort -_time` |
+
+## Group Policy Event IDs (Group Policy Log)
+
+| EventID | Query |
+|---------|-------|
+| 1000 | `index="Windows Server" EventCode=1000 source="*GroupPolicy*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Processing_Mode, Processing_Time_ms \| sort -_time` |
+| 1001 | `index="Windows Server" EventCode=1001 source="*GroupPolicy*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Processing_Mode, Processing_Time_ms \| sort -_time` |
+| 1006 | `index="Windows Server" EventCode=1006 source="*GroupPolicy*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Activity_ID, Error_Code, Error_Description \| sort -_time` |
+| 1085 | `index="Windows Server" EventCode=1085 source="*GroupPolicy*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Extension_Name, Processing_Time_ms \| sort -_time` |
+| 1125 | `index="Windows Server" EventCode=1125 source="*GroupPolicy*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Extension_Name, Error_Code \| sort -_time` |
+| 1127 | `index="Windows Server" EventCode=1127 source="*GroupPolicy*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Extension_Name, Processing_Time_ms \| sort -_time` |
+| 1129 | `index="Windows Server" EventCode=1129 source="*GroupPolicy*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, User, Extension_Name, Error_Code \| sort -_time` |
+
+## DHCP Server Event IDs (DHCP Server Log)
+
+| EventID | Query |
+|---------|-------|
+| 1000 | `index="Windows Server" EventCode=1000 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Status \| sort -_time` |
+| 1001 | `index="Windows Server" EventCode=1001 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Status \| sort -_time` |
+| 1002 | `index="Windows Server" EventCode=1002 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Status \| sort -_time` |
+| 1003 | `index="Windows Server" EventCode=1003 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Status \| sort -_time` |
+| 1004 | `index="Windows Server" EventCode=1004 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Status \| sort -_time` |
+| 1005 | `index="Windows Server" EventCode=1005 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Status \| sort -_time` |
+| 1006 | `index="Windows Server" EventCode=1006 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Status \| sort -_time` |
+| 1007 | `index="Windows Server" EventCode=1007 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Status \| sort -_time` |
+| 1008 | `index="Windows Server" EventCode=1008 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Status \| sort -_time` |
+| 1009 | `index="Windows Server" EventCode=1009 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Status \| sort -_time` |
+| 1010 | `index="Windows Server" EventCode=1010 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, IP_Address, MAC_Address \| sort -_time` |
+| 1011 | `index="Windows Server" EventCode=1011 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, IP_Address, MAC_Address \| sort -_time` |
+| 1012 | `index="Windows Server" EventCode=1012 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, IP_Address, MAC_Address \| sort -_time` |
+| 1013 | `index="Windows Server" EventCode=1013 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, IP_Address, MAC_Address \| sort -_time` |
+| 1014 | `index="Windows Server" EventCode=1014 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, IP_Address, MAC_Address \| sort -_time` |
+| 1015 | `index="Windows Server" EventCode=1015 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, IP_Address, MAC_Address \| sort -_time` |
+| 1016 | `index="Windows Server" EventCode=1016 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, IP_Address, MAC_Address \| sort -_time` |
+| 1017 | `index="Windows Server" EventCode=1017 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, IP_Address, MAC_Address \| sort -_time` |
+| 1018 | `index="Windows Server" EventCode=1018 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, IP_Address, MAC_Address \| sort -_time` |
+| 1019 | `index="Windows Server" EventCode=1019 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, IP_Address, MAC_Address \| sort -_time` |
+| 1020 | `index="Windows Server" EventCode=1020 source="*DHCP*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, IP_Address, Lease_Expiration \| sort -_time` |
+
+## Windows Update Event IDs (Windows Update Log)
+
+| EventID | Query |
+|---------|-------|
+| 19 | `index="Windows Server" EventCode=19 source="*WindowsUpdate*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Update_Title \| sort -_time` |
+| 20 | `index="Windows Server" EventCode=20 source="*WindowsUpdate*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Update_Title \| sort -_time` |
+| 21 | `index="Windows Server" EventCode=21 source="*WindowsUpdate*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Update_Title \| sort -_time` |
+| 22 | `index="Windows Server" EventCode=22 source="*WindowsUpdate*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Update_Title \| sort -_time` |
+
+## Windows Firewall Event IDs (Windows Firewall Log)
+
+| EventID | Query |
+|---------|-------|
+| 2003 | `index="Windows Server" EventCode=2003 source="*Firewall*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Rule_Name \| sort -_time` |
+| 2004 | `index="Windows Server" EventCode=2004 source="*Firewall*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Rule_Name \| sort -_time` |
+| 2005 | `index="Windows Server" EventCode=2005 source="*Firewall*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Rule_Name \| sort -_time` |
+| 2006 | `index="Windows Server" EventCode=2006 source="*Firewall*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Rule_Name \| sort -_time` |
+| 2033 | `index="Windows Server" EventCode=2033 source="*Firewall*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Rule_Name \| sort -_time` |
+
+## Performance Counters/WMI Event IDs
+
+| EventID | Query |
+|---------|-------|
+| 10 | `index="Windows Server" EventCode=10 source="*WMI*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Error_Code \| sort -_time` |
+| 5858 | `index="Windows Server" EventCode=5858 earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Counter_Name, Instance_Name \| sort -_time` |
+| 2 | `index="Windows Server" EventCode=2 source="*Perflib*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Service_Name \| sort -_time` |
+| 1008 | `index="Windows Server" EventCode=1008 source="*Perflib*" earliest=-14d@d latest=now \| table _time, EventCode, ComputerName, Message, Counter_Name, Error_Code \| sort -_time` |
+
+## Summary Queries
+
+### Top 10 Most Common Event IDs
+```splunk
+index="Windows Server" earliest=-14d@d latest=now 
+| stats count by EventCode 
+| sort -count 
+| head 10 
+| table EventCode, count
+```
+
+### Event ID Frequency by Day
+```splunk
+index="Windows Server" earliest=-14d@d latest=now 
+| eval day=strftime(_time, "%Y-%m-%d") 
+| stats count by day, EventCode 
+| sort day, -count 
+| table day, EventCode, count
+```
+
+### Critical Security Events Overview
+```splunk
+index="Windows Server" (EventCode=4624 OR EventCode=4625 OR EventCode=4648 OR EventCode=4672 OR EventCode=4720 OR EventCode=4726) earliest=-14d@d latest=now 
+| stats count by EventCode, ComputerName 
+| sort -count 
+| table EventCode, ComputerName, count
+```
+
+### Failed Logon Analysis
+```splunk
+index="Windows Server" EventCode=4625 earliest=-14d@d latest=now 
+| stats count by Account_Name, Source_Network_Address, Failure_Reason 
+| sort -count 
+| table Account_Name, Source_Network_Address, Failure_Reason, count
+```
+
+### Service Start/Stop Events
+```splunk
+index="Windows Server" (EventCode=7035 OR EventCode=7036) earliest=-14d@d latest=now 
+| stats count by EventCode, Service_Name, Service_State 
+| sort Service_Name, -count 
+| table EventCode, Service_Name, Service_State, count
+```
+
+## Notes
+
+1. **Index Name**: All queries assume the Splunk index is named "Windows Server" (with quotes due to the space). Adjust if your index name is different.
+
+2. **Time Range**: `-14d@d` searches from 14 days ago at midnight to now. Adjust as needed.
+
+3. **Field Names**: Field names may vary depending on your data inputs and parsing. Common variations include:
+   - `EventCode` vs `EventID` vs `event_id`
+   - `ComputerName` vs `Computer` vs `host`
+   - `Account_Name` vs `user` vs `User`
+
+4. **Source Filtering**: Some queries include source filters (e.g., `source="*Defender*"`) to distinguish between logs from different services that might share event IDs.
+
+5. **Performance**: For large environments, consider adding additional filters like `ComputerName` or `sourcetype` to improve query performance.
+
+6. **Missing Fields**: If certain fields don't appear in your environment, remove them from the table command or use `fillnull` to handle missing values.
+
+7. **Custom Fields**: You may need to add or modify field extractions based on your specific log format and requirements.
