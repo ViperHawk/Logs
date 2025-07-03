@@ -1,0 +1,331 @@
+# Windows Server 2019 Event ID Elasticsearch Queries
+**Author: Ross Durrer**  
+**Created: 2025**
+
+This document contains Elasticsearch queries for Windows Server 2019 event IDs, designed to search for events over a two-week period and display results in table format.
+
+## Query Syntax Reference
+
+### Kibana Discover Query Bar Syntax
+```
+field_name:value AND field_name2:value2
+```
+
+### Elasticsearch Query DSL (for API/Dev Tools)
+```json
+{
+  "query": {
+    "bool": {
+      "must": [
+        {"term": {"field_name": "value"}},
+        {"range": {"@timestamp": {"gte": "now-14d", "lte": "now"}}}
+      ]
+    }
+  }
+}
+```
+
+## Security Event IDs (Security Log)
+
+| EventID | Kibana Query Bar | Elasticsearch Query DSL |
+|---------|------------------|--------------------------|
+| 1102 | `_index:"Windows Server" AND event.code:1102 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"1102"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4608 | `_index:"Windows Server" AND event.code:4608 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4608"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4609 | `_index:"Windows Server" AND event.code:4609 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4609"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4610 | `_index:"Windows Server" AND event.code:4610 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4610"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4611 | `_index:"Windows Server" AND event.code:4611 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4611"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4612 | `_index:"Windows Server" AND event.code:4612 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4612"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4614 | `_index:"Windows Server" AND event.code:4614 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4614"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4615 | `_index:"Windows Server" AND event.code:4615 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4615"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4616 | `_index:"Windows Server" AND event.code:4616 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4616"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4618 | `_index:"Windows Server" AND event.code:4618 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4618"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4624 | `_index:"Windows Server" AND event.code:4624 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4624"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4625 | `_index:"Windows Server" AND event.code:4625 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4625"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4634 | `_index:"Windows Server" AND event.code:4634 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4634"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4647 | `_index:"Windows Server" AND event.code:4647 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4647"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4648 | `_index:"Windows Server" AND event.code:4648 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4648"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4649 | `_index:"Windows Server" AND event.code:4649 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4649"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4672 | `_index:"Windows Server" AND event.code:4672 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4672"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4688 | `_index:"Windows Server" AND event.code:4688 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4688"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4689 | `_index:"Windows Server" AND event.code:4689 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4689"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4697 | `_index:"Windows Server" AND event.code:4697 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4697"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4698 | `_index:"Windows Server" AND event.code:4698 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4698"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4699 | `_index:"Windows Server" AND event.code:4699 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4699"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4700 | `_index:"Windows Server" AND event.code:4700 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4700"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4701 | `_index:"Windows Server" AND event.code:4701 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4701"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4702 | `_index:"Windows Server" AND event.code:4702 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4702"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4719 | `_index:"Windows Server" AND event.code:4719 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4719"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4720 | `_index:"Windows Server" AND event.code:4720 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4720"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4722 | `_index:"Windows Server" AND event.code:4722 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4722"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4723 | `_index:"Windows Server" AND event.code:4723 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4723"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4724 | `_index:"Windows Server" AND event.code:4724 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4724"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4725 | `_index:"Windows Server" AND event.code:4725 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4725"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4726 | `_index:"Windows Server" AND event.code:4726 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4726"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4727 | `_index:"Windows Server" AND event.code:4727 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4727"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4728 | `_index:"Windows Server" AND event.code:4728 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4728"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4729 | `_index:"Windows Server" AND event.code:4729 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4729"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4730 | `_index:"Windows Server" AND event.code:4730 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4730"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4731 | `_index:"Windows Server" AND event.code:4731 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4731"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4732 | `_index:"Windows Server" AND event.code:4732 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4732"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4733 | `_index:"Windows Server" AND event.code:4733 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4733"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4734 | `_index:"Windows Server" AND event.code:4734 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4734"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4735 | `_index:"Windows Server" AND event.code:4735 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4735"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4738 | `_index:"Windows Server" AND event.code:4738 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4738"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4740 | `_index:"Windows Server" AND event.code:4740 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4740"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4741 | `_index:"Windows Server" AND event.code:4741 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4741"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4742 | `_index:"Windows Server" AND event.code:4742 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4742"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4743 | `_index:"Windows Server" AND event.code:4743 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4743"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4756 | `_index:"Windows Server" AND event.code:4756 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4756"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4757 | `_index:"Windows Server" AND event.code:4757 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4757"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4758 | `_index:"Windows Server" AND event.code:4758 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4758"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4759 | `_index:"Windows Server" AND event.code:4759 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4759"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4768 | `_index:"Windows Server" AND event.code:4768 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4768"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4769 | `_index:"Windows Server" AND event.code:4769 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4769"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4770 | `_index:"Windows Server" AND event.code:4770 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4770"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4771 | `_index:"Windows Server" AND event.code:4771 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4771"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4772 | `_index:"Windows Server" AND event.code:4772 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4772"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4773 | `_index:"Windows Server" AND event.code:4773 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4773"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4774 | `_index:"Windows Server" AND event.code:4774 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4774"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4775 | `_index:"Windows Server" AND event.code:4775 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4775"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4776 | `_index:"Windows Server" AND event.code:4776 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4776"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4777 | `_index:"Windows Server" AND event.code:4777 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4777"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4778 | `_index:"Windows Server" AND event.code:4778 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4778"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4779 | `_index:"Windows Server" AND event.code:4779 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4779"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4798 | `_index:"Windows Server" AND event.code:4798 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4798"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4799 | `_index:"Windows Server" AND event.code:4799 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4799"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4800 | `_index:"Windows Server" AND event.code:4800 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4800"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4801 | `_index:"Windows Server" AND event.code:4801 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4801"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4802 | `_index:"Windows Server" AND event.code:4802 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4802"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4803 | `_index:"Windows Server" AND event.code:4803 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4803"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4820 | `_index:"Windows Server" AND event.code:4820 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4820"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4821 | `_index:"Windows Server" AND event.code:4821 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4821"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4822 | `_index:"Windows Server" AND event.code:4822 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4822"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4823 | `_index:"Windows Server" AND event.code:4823 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4823"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4824 | `_index:"Windows Server" AND event.code:4824 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4824"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 5136 | `_index:"Windows Server" AND event.code:5136 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"5136"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 5137 | `_index:"Windows Server" AND event.code:5137 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"5137"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 5139 | `_index:"Windows Server" AND event.code:5139 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"5139"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 5140 | `_index:"Windows Server" AND event.code:5140 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"5140"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 5141 | `_index:"Windows Server" AND event.code:5141 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"5141"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 5142 | `_index:"Windows Server" AND event.code:5142 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"5142"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 5143 | `_index:"Windows Server" AND event.code:5143 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"5143"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 5144 | `_index:"Windows Server" AND event.code:5144 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"5144"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 5145 | `_index:"Windows Server" AND event.code:5145 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"5145"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 5827 | `_index:"Windows Server" AND event.code:5827 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"5827"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 5828 | `_index:"Windows Server" AND event.code:5828 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"5828"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 5829 | `_index:"Windows Server" AND event.code:5829 AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"5829"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+
+## System Event IDs (System Log)
+
+| EventID | Kibana Query Bar | Elasticsearch Query DSL |
+|---------|------------------|--------------------------|
+| 18 | `_index:"Windows Server" AND event.code:18 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"18"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 29 | `_index:"Windows Server" AND event.code:29 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"29"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 37 | `_index:"Windows Server" AND event.code:37 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"37"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 38 | `_index:"Windows Server" AND event.code:38 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"38"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 47 | `_index:"Windows Server" AND event.code:47 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"47"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 1074 | `_index:"Windows Server" AND event.code:1074 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"1074"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 6005 | `_index:"Windows Server" AND event.code:6005 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"6005"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 6006 | `_index:"Windows Server" AND event.code:6006 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"6006"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 6013 | `_index:"Windows Server" AND event.code:6013 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"6013"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 7034 | `_index:"Windows Server" AND event.code:7034 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"7034"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 7035 | `_index:"Windows Server" AND event.code:7035 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"7035"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 7036 | `_index:"Windows Server" AND event.code:7036 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"7036"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 7040 | `_index:"Windows Server" AND event.code:7040 AND winlog.channel:"System" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"7040"}},{"term":{"winlog.channel":"System"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+
+## Application Event IDs (Application Log)
+
+| EventID | Kibana Query Bar | Elasticsearch Query DSL |
+|---------|------------------|--------------------------|
+| 1000 | `_index:"Windows Server" AND event.code:1000 AND winlog.channel:"Application" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"1000"}},{"term":{"winlog.channel":"Application"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 1001 | `_index:"Windows Server" AND event.code:1001 AND winlog.channel:"Application" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"1001"}},{"term":{"winlog.channel":"Application"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 1002 | `_index:"Windows Server" AND event.code:1002 AND winlog.channel:"Application" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"1002"}},{"term":{"winlog.channel":"Application"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 1004 | `_index:"Windows Server" AND event.code:1004 AND winlog.channel:"Application" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"1004"}},{"term":{"winlog.channel":"Application"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 1006 | `_index:"Windows Server" AND event.code:1006 AND winlog.channel:"Application" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"1006"}},{"term":{"winlog.channel":"Application"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 1008 | `_index:"Windows Server" AND event.code:1008 AND winlog.channel:"Application" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"1008"}},{"term":{"winlog.channel":"Application"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+
+## PowerShell Event IDs (PowerShell Log)
+
+| EventID | Kibana Query Bar | Elasticsearch Query DSL |
+|---------|------------------|--------------------------|
+| 4103 | `_index:"Windows Server" AND event.code:4103 AND winlog.channel:"Microsoft-Windows-PowerShell/Operational" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4103"}},{"term":{"winlog.channel":"Microsoft-Windows-PowerShell/Operational"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4104 | `_index:"Windows Server" AND event.code:4104 AND winlog.channel:"Microsoft-Windows-PowerShell/Operational" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4104"}},{"term":{"winlog.channel":"Microsoft-Windows-PowerShell/Operational"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4105 | `_index:"Windows Server" AND event.code:4105 AND winlog.channel:"Microsoft-Windows-PowerShell/Operational" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4105"}},{"term":{"winlog.channel":"Microsoft-Windows-PowerShell/Operational"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+| 4106 | `_index:"Windows Server" AND event.code:4106 AND winlog.channel:"Microsoft-Windows-PowerShell/Operational" AND @timestamp:[now-14d TO now]` | `{"query":{"bool":{"must":[{"term":{"event.code":"4106"}},{"term":{"winlog.channel":"Microsoft-Windows-PowerShell/Operational"}},{"range":{"@timestamp":{"gte":"now-14d","lte":"now"}}}],"filter":[{"term":{"_index":"Windows Server"}}]}}}` |
+
+## Summary Queries
+
+### Top 10 Most Common Event IDs (Kibana)
+```
+_index:"Windows Server" AND @timestamp:[now-14d TO now]
+```
+**Visualization**: Terms aggregation on `event.code` field
+
+### Top 10 Most Common Event IDs (Elasticsearch Query DSL)
+```json
+{
+  "query": {
+    "bool": {
+      "must": [
+        {"range": {"@timestamp": {"gte": "now-14d", "lte": "now"}}}
+      ],
+      "filter": [
+        {"term": {"_index": "Windows Server"}}
+      ]
+    }
+  },
+  "aggs": {
+    "top_event_codes": {
+      "terms": {
+        "field": "event.code",
+        "size": 10
+      }
+    }
+  }
+}
+```
+
+### Critical Security Events (Kibana)
+```
+_index:"Windows Server" AND (event.code:(4624 OR 4625 OR 4648 OR 4672 OR 4720 OR 4726)) AND @timestamp:[now-14d TO now]
+```
+
+### Critical Security Events (Elasticsearch Query DSL)
+```json
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "terms": {
+            "event.code": ["4624", "4625", "4648", "4672", "4720", "4726"]
+          }
+        },
+        {"range": {"@timestamp": {"gte": "now-14d", "lte": "now"}}}
+      ],
+      "filter": [
+        {"term": {"_index": "Windows Server"}}
+      ]
+    }
+  }
+}
+```
+
+### Failed Logon Analysis (Kibana)
+```
+_index:"Windows Server" AND event.code:4625 AND @timestamp:[now-14d TO now]
+```
+
+### Failed Logon Analysis (Elasticsearch Query DSL)
+```json
+{
+  "query": {
+    "bool": {
+      "must": [
+        {"term": {"event.code": "4625"}},
+        {"range": {"@timestamp": {"gte": "now-14d", "lte": "now"}}}
+      ],
+      "filter": [
+        {"term": {"_index": "Windows Server"}}
+      ]
+    }
+  },
+  "aggs": {
+    "failed_logons": {
+      "terms": {
+        "field": "winlog.event_data.TargetUserName.keyword",
+        "size": 10
+      },
+      "aggs": {
+        "source_ips": {
+          "terms": {
+            "field": "source.ip",
+            "size": 5
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Service Start/Stop Events (Kibana)
+```
+_index:"Windows Server" AND (event.code:(7035 OR 7036)) AND @timestamp:[now-14d TO now]
+```
+
+### Service Start/Stop Events (Elasticsearch Query DSL)
+```json
+{
+  "query": {
+    "bool": {
+      "must": [
+        {"terms": {"event.code": ["7035", "7036"]}},
+        {"range": {"@timestamp": {"gte": "now-14d", "lte": "now"}}}
+      ],
+      "filter": [
+        {"term": {"_index": "Windows Server"}}
+      ]
+    }
+  },
+  "aggs": {
+    "services": {
+      "terms": {
+        "field": "winlog.event_data.param1.keyword",
+        "size": 20
+      }
+    }
+  }
+}
+```
+
+## Kibana Visualization Examples
+
+### Data Table for Event Analysis
+1. Go to **Visualize Library** → **Create visualization** → **Data table**
+2. Set index pattern to match your Windows Server logs
+3. Add **Buckets**:
+   - **Split rows**: Terms aggregation on `event.code`
+   - **Split rows**: Terms aggregation on `host.name`
+4. Add **Metrics**:
+   - Count
+   - Unique count of `user.name`
+
+### Timeline Visualization
+1. Create **Line chart** visualization
+2. **X-axis**: Date histogram on `@timestamp`
+3. **Y-axis**: Count
+4. **Split series**: Terms on `event.code`
+5. Add filters for specific event codes
+
+### Heat Map for User Activity
+1. Create **Heat map** visualization
+2. **X-axis**: Terms on `user.name`
+3. **Y-axis**: Date histogram on `@timestamp` (hourly)
+4. **Values**: Count
+5. Filter by logon events (4624, 4625)
+
+## Notes
+
+1. **Index Name**: All queries assume the Elasticsearch index is named "Windows Server". Adjust if your index name is different.
+
+2. **Time Range**: `now-14d` searches from 14 days ago to now. Adjust as needed.
+
+3. **Field Names**: Field names may vary depending on your data inputs and parsing. Common ECS fields include:
+   - `event.code` for Event ID
+   - `host.name` for Computer Name
+   - `user.name` for User Account
+   - `winlog.channel` for Event Log Channel
+   - `winlog.event_data.*` for Event-specific data
+
+4. **Performance**: For large datasets, consider:
+   - Adding more specific filters
+   - Using index patterns with date-based indices
+   - Limiting result size with `size` parameter
+   - Using field data types appropriately (keyword vs text)
+
+5. **Kibana Query Bar**: Uses Lucene query syntax by default. Can be switched to KQL (Kibana Query Language) in settings.
+
+6. **Custom Fields**: You may need to create custom field mappings based on your specific log format and requirements.
+
+7. **Time Zones**: Elasticsearch stores timestamps in UTC. Kibana displays them in browser timezone by default.
