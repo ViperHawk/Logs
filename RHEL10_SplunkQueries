@@ -1,0 +1,281 @@
+# Red Hat Enterprise Linux 10 Log Entries Splunk Queries
+**Author: Ross Durrer**  
+**Created: 2025**
+
+This document contains SPL queries for Red Hat Enterprise Linux 10 log entries, designed to search for logs over a two-week period and display results in table format.
+
+## Syslog Priority Levels Reference
+
+| Priority Level | Name | Description |
+|----------------|------|-------------|
+| 0 | emerg | System is unusable |
+| 1 | alert | Action must be taken immediately |
+| 2 | crit | Critical conditions |
+| 3 | err | Error conditions |
+| 4 | warning | Warning conditions |
+| 5 | notice | Normal but significant condition |
+| 6 | info | Informational messages |
+| 7 | debug | Debug-level messages |
+
+## Syslog Facility Codes Reference
+
+| Facility | Code | Description |
+|----------|------|-------------|
+| kern | 0 | Kernel messages |
+| user | 1 | User-level messages |
+| mail | 2 | Mail system messages |
+| daemon | 3 | System daemon messages |
+| auth | 4 | Authorization/security messages |
+| syslog | 5 | Internal syslog messages |
+| lpr | 6 | Line printer subsystem |
+| news | 7 | Network news subsystem |
+| uucp | 8 | UUCP subsystem |
+| cron | 9 | Clock daemon messages |
+| authpriv | 10 | Authorization/security messages |
+| ftp | 11 | FTP daemon messages |
+| local0-7 | 16-23 | Local use facilities |
+
+## System Log Entries (/var/log/messages)
+
+| Log Type | Query |
+|----------|-------|
+| **All System Messages** | `index="Linux" source="/var/log/messages" earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Kernel Messages** | `index="Linux" source="/var/log/messages" facility=kern earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Critical System Errors** | `index="Linux" source="/var/log/messages" (priority=crit OR priority=alert OR priority=emerg) earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **System Daemon Messages** | `index="Linux" source="/var/log/messages" facility=daemon earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Systemd Service Messages** | `index="Linux" source="/var/log/messages" program=systemd earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **NetworkManager Events** | `index="Linux" source="/var/log/messages" program=NetworkManager earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Out of Memory Events** | `index="Linux" source="/var/log/messages" message="*Out of memory*" earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Hardware Errors** | `index="Linux" source="/var/log/messages" (message="*hardware*" OR message="*disk error*" OR message="*I/O error*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Service Start/Stop** | `index="Linux" source="/var/log/messages" (message="*started*" OR message="*stopped*" OR message="*Starting*" OR message="*Stopping*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Mount/Unmount Events** | `index="Linux" source="/var/log/messages" (message="*mounted*" OR message="*unmounted*" OR message="*mount*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+
+## Security Log Entries (/var/log/secure)
+
+| Log Type | Query |
+|----------|-------|
+| **All Security Messages** | `index="Linux" source="/var/log/secure" earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, message \| sort -_time` |
+| **SSH Successful Logins** | `index="Linux" source="/var/log/secure" program=sshd message="*Accepted*" earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, src_ip, message \| sort -_time` |
+| **SSH Failed Logins** | `index="Linux" source="/var/log/secure" program=sshd (message="*Failed*" OR message="*Invalid*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, src_ip, message \| sort -_time` |
+| **SSH Connection Closed** | `index="Linux" source="/var/log/secure" program=sshd message="*Connection closed*" earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, src_ip, message \| sort -_time` |
+| **Sudo Commands** | `index="Linux" source="/var/log/secure" program=sudo earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, command, message \| sort -_time` |
+| **User Account Changes** | `index="Linux" source="/var/log/secure" (message="*user added*" OR message="*user deleted*" OR message="*password changed*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, message \| sort -_time` |
+| **Authentication Failures** | `index="Linux" source="/var/log/secure" (message="*authentication failure*" OR message="*Authentication failure*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, message \| sort -_time` |
+| **PAM Authentication** | `index="Linux" source="/var/log/secure" program=*pam* earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, message \| sort -_time` |
+| **Root Access Attempts** | `index="Linux" source="/var/log/secure" (user=root OR message="*root*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, src_ip, message \| sort -_time` |
+| **Login Session Events** | `index="Linux" source="/var/log/secure" (message="*session opened*" OR message="*session closed*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, message \| sort -_time` |
+
+## Boot Log Entries (/var/log/boot.log)
+
+| Log Type | Query |
+|----------|-------|
+| **All Boot Messages** | `index="Linux" source="/var/log/boot.log" earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Boot Failures** | `index="Linux" source="/var/log/boot.log" (message="*FAILED*" OR message="*failed*" OR priority=err) earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Service Start Successes** | `index="Linux" source="/var/log/boot.log" (message="*OK*" OR message="*started*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Hardware Detection** | `index="Linux" source="/var/log/boot.log" (message="*detected*" OR message="*found*" OR message="*hardware*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Module Loading** | `index="Linux" source="/var/log/boot.log" (message="*module*" OR message="*loaded*" OR message="*insmod*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Network Interface Init** | `index="Linux" source="/var/log/boot.log" (message="*eth*" OR message="*interface*" OR message="*network*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+
+## Cron Log Entries (/var/log/cron)
+
+| Log Type | Query |
+|----------|-------|
+| **All Cron Messages** | `index="Linux" source="/var/log/cron" earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, command, message \| sort -_time` |
+| **Cron Job Executions** | `index="Linux" source="/var/log/cron" program=CROND earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, command, message \| sort -_time` |
+| **Crontab Changes** | `index="Linux" source="/var/log/cron" (message="*crontab*" OR message="*LIST*" OR message="*REPLACE*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, message \| sort -_time` |
+| **Root Cron Jobs** | `index="Linux" source="/var/log/cron" user=root earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, command, message \| sort -_time` |
+| **Cron Failures** | `index="Linux" source="/var/log/cron" (priority=err OR message="*failed*" OR message="*error*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, user, command, message \| sort -_time` |
+
+## Mail Log Entries (/var/log/maillog)
+
+| Log Type | Query |
+|----------|-------|
+| **All Mail Messages** | `index="Linux" source="/var/log/maillog" earliest=-14d@d latest=now \| table _time, host, facility, priority, program, from, to, message \| sort -_time` |
+| **Postfix Messages** | `index="Linux" source="/var/log/maillog" program=postfix* earliest=-14d@d latest=now \| table _time, host, facility, priority, program, from, to, status, message \| sort -_time` |
+| **Sent Mail** | `index="Linux" source="/var/log/maillog" (message="*sent*" OR status=sent) earliest=-14d@d latest=now \| table _time, host, facility, priority, program, from, to, message \| sort -_time` |
+| **Bounced Mail** | `index="Linux" source="/var/log/maillog" (message="*bounced*" OR message="*deferred*" OR status=bounced) earliest=-14d@d latest=now \| table _time, host, facility, priority, program, from, to, message \| sort -_time` |
+| **Mail Delivery Failures** | `index="Linux" source="/var/log/maillog" (priority=err OR message="*failed*" OR message="*reject*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, from, to, message \| sort -_time` |
+| **SPAM Detection** | `index="Linux" source="/var/log/maillog" (message="*spam*" OR message="*SPAM*" OR message="*blocked*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, from, to, message \| sort -_time` |
+
+## Systemd Journal Entries (journalctl equivalent)
+
+| Log Type | Query |
+|----------|-------|
+| **All Journal Messages** | `index="Linux" sourcetype="linux:journald" earliest=-14d@d latest=now \| table _time, host, transport, priority, systemd_unit, exe, message \| sort -_time` |
+| **Systemd Unit Failures** | `index="Linux" sourcetype="linux:journald" (message="*failed*" OR message="*Failed*") earliest=-14d@d latest=now \| table _time, host, transport, priority, systemd_unit, exe, message \| sort -_time` |
+| **Service State Changes** | `index="Linux" sourcetype="linux:journald" (message="*Started*" OR message="*Stopped*" OR message="*Reloaded*") earliest=-14d@d latest=now \| table _time, host, transport, priority, systemd_unit, exe, message \| sort -_time` |
+| **Kernel Messages** | `index="Linux" sourcetype="linux:journald" transport=kernel earliest=-14d@d latest=now \| table _time, host, transport, priority, systemd_unit, exe, message \| sort -_time` |
+| **User Process Messages** | `index="Linux" sourcetype="linux:journald" transport=stdout earliest=-14d@d latest=now \| table _time, host, transport, priority, systemd_unit, exe, comm, message \| sort -_time` |
+| **System Boot Messages** | `index="Linux" sourcetype="linux:journald" (message="*boot*" OR message="*Boot*" OR message="*startup*") earliest=-14d@d latest=now \| table _time, host, transport, priority, systemd_unit, exe, message \| sort -_time` |
+| **Error Level Messages** | `index="Linux" sourcetype="linux:journald" (priority=err OR priority=crit OR priority=alert OR priority=emerg) earliest=-14d@d latest=now \| table _time, host, transport, priority, systemd_unit, exe, message \| sort -_time` |
+| **User Sessions** | `index="Linux" sourcetype="linux:journald" (message="*session*" OR message="*login*" OR message="*logout*") earliest=-14d@d latest=now \| table _time, host, transport, priority, systemd_unit, exe, user, message \| sort -_time` |
+
+## DNF/YUM Package Manager Logs (/var/log/dnf.log)
+
+| Log Type | Query |
+|----------|-------|
+| **All Package Manager Activity** | `index="Linux" source="/var/log/dnf.log" earliest=-14d@d latest=now \| table _time, host, action, package, version, user, message \| sort -_time` |
+| **Package Installations** | `index="Linux" source="/var/log/dnf.log" (action=Installed OR message="*Installed*") earliest=-14d@d latest=now \| table _time, host, action, package, version, user, message \| sort -_time` |
+| **Package Updates** | `index="Linux" source="/var/log/dnf.log" (action=Updated OR message="*Updated*") earliest=-14d@d latest=now \| table _time, host, action, package, version, user, message \| sort -_time` |
+| **Package Removals** | `index="Linux" source="/var/log/dnf.log" (action=Erased OR message="*Erased*" OR message="*Removed*") earliest=-14d@d latest=now \| table _time, host, action, package, version, user, message \| sort -_time` |
+| **Repository Updates** | `index="Linux" source="/var/log/dnf.log" (message="*repository*" OR message="*repo*" OR message="*metadata*") earliest=-14d@d latest=now \| table _time, host, action, package, version, user, message \| sort -_time` |
+| **DNF Errors** | `index="Linux" source="/var/log/dnf.log" (priority=err OR message="*error*" OR message="*failed*") earliest=-14d@d latest=now \| table _time, host, action, package, version, user, message \| sort -_time` |
+
+## Audit Log Entries (/var/log/audit/audit.log)
+
+| Log Type | Query |
+|----------|-------|
+| **All Audit Messages** | `index="Linux" source="/var/log/audit/audit.log" earliest=-14d@d latest=now \| table _time, host, type, success, auid, uid, gid, exe, comm, msg \| sort -_time` |
+| **File Access Events** | `index="Linux" source="/var/log/audit/audit.log" type=PATH earliest=-14d@d latest=now \| table _time, host, type, success, auid, uid, gid, exe, name, msg \| sort -_time` |
+| **System Call Audits** | `index="Linux" source="/var/log/audit/audit.log" type=SYSCALL earliest=-14d@d latest=now \| table _time, host, type, success, auid, uid, gid, exe, syscall, msg \| sort -_time` |
+| **User Authentication** | `index="Linux" source="/var/log/audit/audit.log" (type=USER_AUTH OR type=USER_ACCT OR type=USER_LOGIN) earliest=-14d@d latest=now \| table _time, host, type, success, auid, uid, res, exe, msg \| sort -_time` |
+| **Privilege Escalation** | `index="Linux" source="/var/log/audit/audit.log" (type=USER_ROLE_CHANGE OR type=USER_CMD) earliest=-14d@d latest=now \| table _time, host, type, success, auid, uid, gid, exe, cmd, msg \| sort -_time` |
+| **Failed Audit Events** | `index="Linux" source="/var/log/audit/audit.log" success=no earliest=-14d@d latest=now \| table _time, host, type, success, auid, uid, gid, exe, res, msg \| sort -_time` |
+| **Configuration Changes** | `index="Linux" source="/var/log/audit/audit.log" (type=CONFIG_CHANGE OR type=SERVICE_START OR type=SERVICE_STOP) earliest=-14d@d latest=now \| table _time, host, type, success, auid, uid, unit, exe, msg \| sort -_time` |
+| **SELinux Events** | `index="Linux" source="/var/log/audit/audit.log" (type=AVC OR type=SELINUX_ERR) earliest=-14d@d latest=now \| table _time, host, type, success, scontext, tcontext, tclass, exe, msg \| sort -_time` |
+
+## Application-Specific Log Entries
+
+### Apache HTTP Server Logs
+
+| Log Type | Query |
+|----------|-------|
+| **Apache Access Log** | `index="Linux" source="/var/log/httpd/access_log" earliest=-14d@d latest=now \| table _time, host, clientip, method, uri, status, bytes, referer, useragent \| sort -_time` |
+| **Apache Error Log** | `index="Linux" source="/var/log/httpd/error_log" earliest=-14d@d latest=now \| table _time, host, log_level, pid, client, message \| sort -_time` |
+| **Apache 4xx Errors** | `index="Linux" source="/var/log/httpd/access_log" status>=400 status<500 earliest=-14d@d latest=now \| table _time, host, clientip, method, uri, status, bytes, referer \| sort -_time` |
+| **Apache 5xx Errors** | `index="Linux" source="/var/log/httpd/access_log" status>=500 earliest=-14d@d latest=now \| table _time, host, clientip, method, uri, status, bytes, referer \| sort -_time` |
+
+### MySQL/MariaDB Logs
+
+| Log Type | Query |
+|----------|-------|
+| **MySQL Error Log** | `index="Linux" source="/var/log/mysqld.log" earliest=-14d@d latest=now \| table _time, host, log_level, thread_id, message \| sort -_time` |
+| **MySQL Slow Query Log** | `index="Linux" source="/var/log/mysql-slow.log" earliest=-14d@d latest=now \| table _time, host, user, query_time, lock_time, rows_sent, rows_examined, query \| sort -_time` |
+| **MySQL Connection Events** | `index="Linux" source="/var/log/mysqld.log" (message="*Connect*" OR message="*connection*") earliest=-14d@d latest=now \| table _time, host, log_level, thread_id, user, message \| sort -_time` |
+
+### Firewall Logs (firewalld)
+
+| Log Type | Query |
+|----------|-------|
+| **Firewall Denied Connections** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") program=firewalld (message="*REJECT*" OR message="*DROP*") earliest=-14d@d latest=now \| table _time, host, src_ip, dest_ip, src_port, dest_port, protocol, action \| sort -_time` |
+| **Firewall Rule Changes** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") program=firewalld (message="*rule*" OR message="*zone*") earliest=-14d@d latest=now \| table _time, host, action, zone, rule, message \| sort -_time` |
+
+### SSH Connection Analysis
+
+| Log Type | Query |
+|----------|-------|
+| **SSH Brute Force Detection** | `index="Linux" source="/var/log/secure" program=sshd message="*Failed*" earliest=-14d@d latest=now \| stats count by src_ip, user \| where count > 10 \| sort -count \| table src_ip, user, count` |
+| **Successful SSH After Failures** | `index="Linux" source="/var/log/secure" program=sshd earliest=-14d@d latest=now \| transaction startswith="Failed" endswith="Accepted" \| table _time, src_ip, user, duration \| sort -_time` |
+
+## Kernel Dmesg Equivalent Logs
+
+| Log Type | Query |
+|----------|-------|
+| **Hardware Errors** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") facility=kern (message="*error*" OR message="*Hardware Error*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **USB Device Events** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") facility=kern (message="*USB*" OR message="*usb*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Network Interface Events** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") facility=kern (message="*eth*" OR message="*ens*" OR message="*link*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Disk I/O Errors** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") facility=kern (message="*I/O error*" OR message="*disk*" OR message="*sd[a-z]*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Memory Events** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") facility=kern (message="*Out of memory*" OR message="*OOM*" OR message="*memory*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Filesystem Events** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") facility=kern (message="*filesystem*" OR message="*ext4*" OR message="*xfs*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+
+## Performance and Resource Monitoring
+
+| Log Type | Query |
+|----------|-------|
+| **High CPU Usage Alerts** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") (message="*CPU*" OR message="*load average*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Disk Space Warnings** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") (message="*disk full*" OR message="*No space left*" OR message="*filesystem full*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, message \| sort -_time` |
+| **Service Restart Events** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") (message="*restarted*" OR message="*restart*" OR message="*reloaded*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, service, message \| sort -_time` |
+
+## Network Services Logs
+
+| Log Type | Query |
+|----------|-------|
+| **DHCP Server Logs** | `index="Linux" source="/var/log/messages" program=dhcpd earliest=-14d@d latest=now \| table _time, host, facility, priority, program, client_ip, mac_address, message \| sort -_time` |
+| **DNS Server Logs** | `index="Linux" source="/var/log/messages" (program=named OR program=bind) earliest=-14d@d latest=now \| table _time, host, facility, priority, program, client_ip, query, message \| sort -_time` |
+| **NFS Logs** | `index="Linux" source="/var/log/messages" (program=nfsd OR program=rpc* OR message="*NFS*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, client_ip, message \| sort -_time` |
+
+## Container Logs (Podman/Docker)
+
+| Log Type | Query |
+|----------|-------|
+| **Podman Container Events** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") (program=podman OR message="*podman*") earliest=-14d@d latest=now \| table _time, host, facility, priority, program, container_id, message \| sort -_time` |
+| **Container Start/Stop** | `index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") (message="*container*" AND (message="*started*" OR message="*stopped*")) earliest=-14d@d latest=now \| table _time, host, facility, priority, program, container_id, action, message \| sort -_time` |
+
+## Summary and Analysis Queries
+
+### Top Error Sources
+```splunk
+index="Linux" (priority=err OR priority=crit OR priority=alert OR priority=emerg) earliest=-14d@d latest=now 
+| stats count by program, host 
+| sort -count 
+| head 20 
+| table program, host, count
+```
+
+### Daily Log Volume Trend
+```splunk
+index="Linux" earliest=-14d@d latest=now 
+| eval day=strftime(_time, "%Y-%m-%d") 
+| stats count by day, priority 
+| sort day, priority 
+| table day, priority, count
+```
+
+### SSH Authentication Analysis
+```splunk
+index="Linux" source="/var/log/secure" program=sshd earliest=-14d@d latest=now 
+| rex field=message "(?<action>Accepted|Failed) (?<auth_method>\w+) for (?<user>\w+) from (?<src_ip>\d+\.\d+\.\d+\.\d+)" 
+| stats count by action, user, src_ip 
+| sort -count 
+| table action, user, src_ip, count
+```
+
+### System Resource Alerts
+```splunk
+index="Linux" (message="*Out of memory*" OR message="*disk full*" OR message="*CPU*" OR message="*load average*") earliest=-14d@d latest=now 
+| stats count by host, message 
+| sort -count 
+| table host, message, count
+```
+
+### Service Failure Analysis
+```splunk
+index="Linux" (message="*failed*" OR message="*Failed*" OR message="*FAILED*") earliest=-14d@d latest=now 
+| rex field=message "(?<service>\w+)\.service.*failed" 
+| stats count by host, service 
+| sort -count 
+| table host, service, count
+```
+
+### Network Connection Monitoring
+```splunk
+index="Linux" source="/var/log/secure" program=sshd (message="*Accepted*" OR message="*Failed*") earliest=-14d@d latest=now 
+| rex field=message "(?<action>Accepted|Failed) .* from (?<src_ip>\d+\.\d+\.\d+\.\d+)" 
+| eval hour=strftime(_time, "%H") 
+| stats count by hour, action, src_ip 
+| sort hour, -count 
+| table hour, action, src_ip, count
+```
+
+### Kernel Module Analysis
+```splunk
+index="Linux" (source="/var/log/messages" OR sourcetype="linux:journald") facility=kern (message="*module*" OR message="*insmod*" OR message="*rmmod*") earliest=-14d@d latest=now 
+| rex field=message "(?<action>loading|unloading|inserted|removed) (?<module>\w+)" 
+| stats count by action, module 
+| sort -count 
+| table action, module, count
+```
+
+## Notes
+
+1. **Index Name**: All queries assume the Splunk index is named "Linux". Adjust if your index name is different.
+
+2. **Time Range**: `-14d@d` searches from 14 days ago at midnight to now. Adjust as needed.
+
+3. **Field Names**: Field names may vary depending on your data inputs and parsing. Common variations include:
+   - `facility` vs `syslog_facility`
+   - `priority` vs `severity` vs `log_level`
+   - `program` vs `process` vs `app`
+   - `host` vs `hostname` vs `computer`
+
+4.
