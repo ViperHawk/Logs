@@ -1,0 +1,350 @@
+# Security Event IDs and KQL Queries for Multiple Log Sources
+
+## Red Hat Linux version 10
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 1 | System Boot | `Syslog \| where TimeGenerated > ago(5d) \| where SyslogMessage contains "kernel: Linux version" \| project TimeGenerated, Computer, SyslogMessage \| order by TimeGenerated desc` |
+| 2 | User Login Success | `Syslog \| where TimeGenerated > ago(5d) \| where Facility == "authpriv" and SyslogMessage contains "Accepted" \| project TimeGenerated, Computer, SyslogMessage \| order by TimeGenerated desc` |
+| 3 | User Login Failed | `Syslog \| where TimeGenerated > ago(5d) \| where Facility == "authpriv" and SyslogMessage contains "Failed" \| project TimeGenerated, Computer, SyslogMessage \| order by TimeGenerated desc` |
+| 4 | User Logout | `Syslog \| where TimeGenerated > ago(5d) \| where Facility == "authpriv" and SyslogMessage contains "session closed" \| project TimeGenerated, Computer, SyslogMessage \| order by TimeGenerated desc` |
+| 5 | Sudo Command Executed | `Syslog \| where TimeGenerated > ago(5d) \| where ProcessName == "sudo" \| project TimeGenerated, Computer, SyslogMessage \| order by TimeGenerated desc` |
+| 6 | Service Start | `Syslog \| where TimeGenerated > ago(5d) \| where SyslogMessage contains "systemd" and SyslogMessage contains "Started" \| project TimeGenerated, Computer, SyslogMessage \| order by TimeGenerated desc` |
+| 7 | Service Stop | `Syslog \| where TimeGenerated > ago(5d) \| where SyslogMessage contains "systemd" and SyslogMessage contains "Stopped" \| project TimeGenerated, Computer, SyslogMessage \| order by TimeGenerated desc` |
+| 8 | File Permission Change | `Syslog \| where TimeGenerated > ago(5d) \| where ProcessName == "chmod" \| project TimeGenerated, Computer, SyslogMessage \| order by TimeGenerated desc` |
+| 9 | User Account Created | `Syslog \| where TimeGenerated > ago(5d) \| where SyslogMessage contains "useradd" \| project TimeGenerated, Computer, SyslogMessage \| order by TimeGenerated desc` |
+| 10 | User Account Deleted | `Syslog \| where TimeGenerated > ago(5d) \| where SyslogMessage contains "userdel" \| project TimeGenerated, Computer, SyslogMessage \| order by TimeGenerated desc` |
+
+## Windows Server 2019/2022
+
+### Security Event IDs (Security Log)
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 1102 | Audit Log Cleared | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 1102 \| project TimeGenerated, Computer, Account, EventData \| order by TimeGenerated desc` |
+| 4608 | Windows Starting Up | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4608 \| project TimeGenerated, Computer, Account, EventData \| order by TimeGenerated desc` |
+| 4609 | Windows Shutting Down | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4609 \| project TimeGenerated, Computer, Account, EventData \| order by TimeGenerated desc` |
+| 4610 | Authentication Package Loaded | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4610 \| project TimeGenerated, Computer, PackageName, EventData \| order by TimeGenerated desc` |
+| 4611 | Trusted Logon Process Registered | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4611 \| project TimeGenerated, Computer, ProcessName, EventData \| order by TimeGenerated desc` |
+| 4612 | Internal Resources Allocated | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4612 \| project TimeGenerated, Computer, Account, EventData \| order by TimeGenerated desc` |
+| 4614 | Notification Package Loaded | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4614 \| project TimeGenerated, Computer, PackageName, EventData \| order by TimeGenerated desc` |
+| 4615 | Invalid Use of LPC Port | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4615 \| project TimeGenerated, Computer, ProcessName, EventData \| order by TimeGenerated desc` |
+| 4616 | System Time Changed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4616 \| project TimeGenerated, Computer, Account, NewTime, PreviousTime \| order by TimeGenerated desc` |
+| 4618 | Monitored Security Event Occurred | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4618 \| project TimeGenerated, Computer, EventLogType, EventData \| order by TimeGenerated desc` |
+| 4624 | Successful Logon | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4624 \| project TimeGenerated, Computer, Account, LogonType, IpAddress, WorkstationName \| order by TimeGenerated desc` |
+| 4625 | Failed Logon | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4625 \| project TimeGenerated, Computer, Account, LogonType, IpAddress, WorkstationName, FailureReason \| order by TimeGenerated desc` |
+| 4634 | Logoff | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4634 \| project TimeGenerated, Computer, Account, LogonType, LogonId \| order by TimeGenerated desc` |
+| 4647 | User Initiated Logoff | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4647 \| project TimeGenerated, Computer, Account, LogonId \| order by TimeGenerated desc` |
+| 4648 | Logon with Explicit Credentials | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4648 \| project TimeGenerated, Computer, Account, TargetAccount, TargetServer, ProcessName \| order by TimeGenerated desc` |
+| 4649 | Replay Attack Detected | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4649 \| project TimeGenerated, Computer, Account, LogonProcessName \| order by TimeGenerated desc` |
+| 4672 | Special Privileges Assigned | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4672 \| project TimeGenerated, Computer, Account, PrivilegeList \| order by TimeGenerated desc` |
+| 4688 | Process Created | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4688 \| project TimeGenerated, Computer, Account, ProcessName, CommandLine, ParentProcessName \| order by TimeGenerated desc` |
+| 4689 | Process Terminated | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4689 \| project TimeGenerated, Computer, Account, ProcessName, ProcessId, ExitStatus \| order by TimeGenerated desc` |
+| 4697 | Service Installed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4697 \| project TimeGenerated, Computer, Account, ServiceName, ServiceFileName, ServiceType \| order by TimeGenerated desc` |
+| 4698 | Scheduled Task Created | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4698 \| project TimeGenerated, Computer, Account, TaskName, TaskContent \| order by TimeGenerated desc` |
+| 4699 | Scheduled Task Deleted | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4699 \| project TimeGenerated, Computer, Account, TaskName \| order by TimeGenerated desc` |
+| 4700 | Scheduled Task Enabled | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4700 \| project TimeGenerated, Computer, Account, TaskName \| order by TimeGenerated desc` |
+| 4701 | Scheduled Task Disabled | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4701 \| project TimeGenerated, Computer, Account, TaskName \| order by TimeGenerated desc` |
+| 4702 | Scheduled Task Updated | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4702 \| project TimeGenerated, Computer, Account, TaskName, TaskContent \| order by TimeGenerated desc` |
+| 4719 | System Audit Policy Changed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4719 \| project TimeGenerated, Computer, Account, CategoryId, SubcategoryId, AuditPolicyChanges \| order by TimeGenerated desc` |
+| 4720 | User Account Created | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4720 \| project TimeGenerated, Computer, Account, TargetAccount, TargetDomain \| order by TimeGenerated desc` |
+| 4722 | User Account Enabled | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4722 \| project TimeGenerated, Computer, Account, TargetAccount, TargetDomain \| order by TimeGenerated desc` |
+| 4723 | Password Change Attempted | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4723 \| project TimeGenerated, Computer, Account, TargetAccount, TargetDomain \| order by TimeGenerated desc` |
+| 4724 | Password Reset Attempted | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4724 \| project TimeGenerated, Computer, Account, TargetAccount, TargetDomain \| order by TimeGenerated desc` |
+| 4725 | User Account Disabled | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4725 \| project TimeGenerated, Computer, Account, TargetAccount, TargetDomain \| order by TimeGenerated desc` |
+| 4726 | User Account Deleted | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4726 \| project TimeGenerated, Computer, Account, TargetAccount, TargetDomain \| order by TimeGenerated desc` |
+| 4727 | Global Security Group Created | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4727 \| project TimeGenerated, Computer, Account, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4728 | User Added to Global Security Group | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4728 \| project TimeGenerated, Computer, Account, MemberName, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4729 | User Removed from Global Security Group | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4729 \| project TimeGenerated, Computer, Account, MemberName, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4730 | Global Security Group Deleted | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4730 \| project TimeGenerated, Computer, Account, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4731 | Local Security Group Created | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4731 \| project TimeGenerated, Computer, Account, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4732 | User Added to Local Security Group | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4732 \| project TimeGenerated, Computer, Account, MemberName, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4733 | User Removed from Local Security Group | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4733 \| project TimeGenerated, Computer, Account, MemberName, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4734 | Local Security Group Deleted | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4734 \| project TimeGenerated, Computer, Account, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4735 | Local Security Group Changed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4735 \| project TimeGenerated, Computer, Account, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4738 | User Account Changed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4738 \| project TimeGenerated, Computer, Account, TargetAccount, TargetDomain, ChangedAttributes \| order by TimeGenerated desc` |
+| 4740 | User Account Locked | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4740 \| project TimeGenerated, Computer, TargetAccount, TargetDomain, CallerComputerName \| order by TimeGenerated desc` |
+| 4741 | Computer Account Created | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4741 \| project TimeGenerated, Computer, Account, TargetAccount, TargetDomain \| order by TimeGenerated desc` |
+| 4742 | Computer Account Changed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4742 \| project TimeGenerated, Computer, Account, TargetAccount, TargetDomain, ChangedAttributes \| order by TimeGenerated desc` |
+| 4743 | Computer Account Deleted | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4743 \| project TimeGenerated, Computer, Account, TargetAccount, TargetDomain \| order by TimeGenerated desc` |
+| 4756 | Universal Security Group Member Added | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4756 \| project TimeGenerated, Computer, Account, MemberName, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4757 | Universal Security Group Member Removed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4757 \| project TimeGenerated, Computer, Account, MemberName, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4758 | Universal Security Group Deleted | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4758 \| project TimeGenerated, Computer, Account, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4759 | Universal Security Group Changed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4759 \| project TimeGenerated, Computer, Account, GroupName, GroupDomain \| order by TimeGenerated desc` |
+| 4768 | Kerberos TGT Requested | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4768 \| project TimeGenerated, Computer, Account, ClientAddress, ServiceName \| order by TimeGenerated desc` |
+| 4769 | Kerberos Service Ticket Requested | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4769 \| project TimeGenerated, Computer, Account, ClientAddress, ServiceName \| order by TimeGenerated desc` |
+| 4770 | Kerberos Service Ticket Renewed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4770 \| project TimeGenerated, Computer, Account, ServiceName \| order by TimeGenerated desc` |
+| 4771 | Kerberos Pre-auth Failed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4771 \| project TimeGenerated, Computer, Account, ClientAddress, FailureCode \| order by TimeGenerated desc` |
+| 4772 | Kerberos Auth Ticket Request Failed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4772 \| project TimeGenerated, Computer, Account, FailureCode \| order by TimeGenerated desc` |
+| 4773 | Kerberos Service Ticket Request Failed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4773 \| project TimeGenerated, Computer, Account, FailureCode \| order by TimeGenerated desc` |
+| 4774 | Account Mapped for Logon | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4774 \| project TimeGenerated, Computer, Account \| order by TimeGenerated desc` |
+| 4775 | Account Could Not Be Mapped | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4775 \| project TimeGenerated, Computer, Account, SourceWorkstation \| order by TimeGenerated desc` |
+| 4776 | Domain Controller Auth | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4776 \| project TimeGenerated, Computer, Account, Workstation, ErrorCode \| order by TimeGenerated desc` |
+| 4777 | Domain Controller Failed to Validate Credentials | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4777 \| project TimeGenerated, Computer, Account, SourceWorkstation \| order by TimeGenerated desc` |
+| 4778 | Session Reconnected | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4778 \| project TimeGenerated, Computer, Account, SessionName, ClientName, ClientAddress \| order by TimeGenerated desc` |
+| 4779 | Session Disconnected | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4779 \| project TimeGenerated, Computer, Account, SessionName, ClientName, ClientAddress \| order by TimeGenerated desc` |
+| 4798 | User's Local Group Membership Enumerated | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4798 \| project TimeGenerated, Computer, Account, TargetAccount, TargetDomain \| order by TimeGenerated desc` |
+| 4799 | Security-Enabled Local Group Membership Enumerated | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4799 \| project TimeGenerated, Computer, Account, TargetAccount, TargetDomain \| order by TimeGenerated desc` |
+| 4800 | Workstation Locked | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4800 \| project TimeGenerated, Computer, Account, TargetUserSid \| order by TimeGenerated desc` |
+| 4801 | Workstation Unlocked | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4801 \| project TimeGenerated, Computer, Account, TargetUserSid \| order by TimeGenerated desc` |
+| 4802 | Screen Saver Invoked | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4802 \| project TimeGenerated, Computer, Account, TargetUserSid \| order by TimeGenerated desc` |
+| 4803 | Screen Saver Dismissed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4803 \| project TimeGenerated, Computer, Account, TargetUserSid \| order by TimeGenerated desc` |
+| 4820 | Kerberos TGT Denied | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4820 \| project TimeGenerated, Computer, Account, ClientAddress, FailureCode \| order by TimeGenerated desc` |
+| 4821 | Kerberos Service Denied | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4821 \| project TimeGenerated, Computer, Account, ServiceName, FailureCode \| order by TimeGenerated desc` |
+| 4822 | NTLM Auth Failed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4822 \| project TimeGenerated, Computer, Account, AuthenticationPackageName \| order by TimeGenerated desc` |
+| 4823 | NTLM Auth Succeeded | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4823 \| project TimeGenerated, Computer, Account, AuthenticationPackageName \| order by TimeGenerated desc` |
+| 4824 | Kerberos Pre-auth Failed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4824 \| project TimeGenerated, Computer, Account, ClientAddress \| order by TimeGenerated desc` |
+| 5136 | Directory Service Object Modified | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5136 \| project TimeGenerated, Computer, Account, ObjectDN, AttributeName, NewValue, OldValue \| order by TimeGenerated desc` |
+| 5137 | Directory Service Object Created | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5137 \| project TimeGenerated, Computer, Account, ObjectDN, ObjectClass \| order by TimeGenerated desc` |
+| 5139 | Directory Service Object Moved | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5139 \| project TimeGenerated, Computer, Account, ObjectDN, ObjectClass \| order by TimeGenerated desc` |
+| 5140 | Network Share Object Accessed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5140 \| project TimeGenerated, Computer, Account, ObjectName, ShareName, SourceAddress \| order by TimeGenerated desc` |
+| 5141 | Directory Service Object Deleted | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5141 \| project TimeGenerated, Computer, Account, ObjectDN, ObjectClass \| order by TimeGenerated desc` |
+| 5142 | Network Share Added | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5142 \| project TimeGenerated, Computer, Account, ShareName, SharePath \| order by TimeGenerated desc` |
+| 5143 | Network Share Modified | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5143 \| project TimeGenerated, Computer, Account, ShareName, SharePath \| order by TimeGenerated desc` |
+| 5144 | Network Share Deleted | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5144 \| project TimeGenerated, Computer, Account, ShareName \| order by TimeGenerated desc` |
+| 5145 | Network Share Check | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5145 \| project TimeGenerated, Computer, Account, ObjectName, ShareName, SourceAddress, AccessMask \| order by TimeGenerated desc` |
+| 5827 | Netlogon Service Started | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5827 \| project TimeGenerated, Computer, Account, ClientComputerName, ProtocolVersion \| order by TimeGenerated desc` |
+| 5828 | Netlogon Service Stopped | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5828 \| project TimeGenerated, Computer, Account, ClientComputerName, ProtocolVersion \| order by TimeGenerated desc` |
+| 5829 | Netlogon Service Paused | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5829 \| project TimeGenerated, Computer, Account, ClientComputerName, ProtocolVersion \| order by TimeGenerated desc` |
+
+### System Event IDs (System Log)
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 18 | System Started | `Event \| where TimeGenerated > ago(5d) \| where EventID == 18 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+| 29 | Kernel Power | `Event \| where TimeGenerated > ago(5d) \| where EventID == 29 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+| 37 | Time Service Started | `Event \| where TimeGenerated > ago(5d) \| where EventID == 37 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+| 38 | Time Service Stopped | `Event \| where TimeGenerated > ago(5d) \| where EventID == 38 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+| 47 | Time Service Sync | `Event \| where TimeGenerated > ago(5d) \| where EventID == 47 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+| 1074 | System Shutdown/Restart | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1074 \| project TimeGenerated, Computer, RenderedDescription, UserName, ProcessName, ReasonCode \| order by TimeGenerated desc` |
+| 6005 | Event Log Service Started | `Event \| where TimeGenerated > ago(5d) \| where EventID == 6005 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+| 6006 | Event Log Service Stopped | `Event \| where TimeGenerated > ago(5d) \| where EventID == 6006 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+| 6013 | System Uptime | `Event \| where TimeGenerated > ago(5d) \| where EventID == 6013 \| project TimeGenerated, Computer, RenderedDescription, UptimeSeconds \| order by TimeGenerated desc` |
+| 7034 | Service Crashed | `Event \| where TimeGenerated > ago(5d) \| where EventID == 7034 \| project TimeGenerated, Computer, RenderedDescription, ServiceName \| order by TimeGenerated desc` |
+| 7035 | Service Control | `Event \| where TimeGenerated > ago(5d) \| where EventID == 7035 \| project TimeGenerated, Computer, RenderedDescription, ServiceName, UserName \| order by TimeGenerated desc` |
+| 7036 | Service State Change | `Event \| where TimeGenerated > ago(5d) \| where EventID == 7036 \| project TimeGenerated, Computer, RenderedDescription, ServiceName \| order by TimeGenerated desc` |
+| 7040 | Service Startup Type Changed | `Event \| where TimeGenerated > ago(5d) \| where EventID == 7040 \| project TimeGenerated, Computer, RenderedDescription, ServiceName \| order by TimeGenerated desc` |
+
+### Application Event IDs (Application Log)
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 1000 | Application Error | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1000 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+| 1001 | Windows Error Reporting | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1001 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+| 1002 | Application Hang | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1002 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+| 1004 | Application Recovery | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1004 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+| 1006 | Application Restart | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1006 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+| 1008 | Application Failure | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1008 \| project TimeGenerated, Computer, RenderedDescription, Source \| order by TimeGenerated desc` |
+
+### PowerShell Event IDs (PowerShell Log)
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 4103 | Module Logging | `Event \| where TimeGenerated > ago(5d) \| where EventID == 4103 \| where Source == "Microsoft-Windows-PowerShell" \| project TimeGenerated, Computer, RenderedDescription, UserName \| order by TimeGenerated desc` |
+| 4104 | Script Block Logging | `Event \| where TimeGenerated > ago(5d) \| where EventID == 4104 \| where Source == "Microsoft-Windows-PowerShell" \| project TimeGenerated, Computer, RenderedDescription, UserName \| order by TimeGenerated desc` |
+| 4105 | Script Block Execution Started | `Event \| where TimeGenerated > ago(5d) \| where EventID == 4105 \| where Source == "Microsoft-Windows-PowerShell" \| project TimeGenerated, Computer, RenderedDescription, UserName \| order by TimeGenerated desc` |
+| 4106 | Script Block Execution Stopped | `Event \| where TimeGenerated > ago(5d) \| where EventID == 4106 \| where Source == "Microsoft-Windows-PowerShell" \| project TimeGenerated, Computer, RenderedDescription, UserName \| order by TimeGenerated desc` |
+
+## Palo Alto Firewall
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| TRAFFIC-ALLOW | Traffic Allowed | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Palo Alto Networks" \| where Activity == "TRAFFIC" \| where DeviceAction == "allow" \| project TimeGenerated, SourceIP, DestinationIP, DestinationPort, Protocol, Application \| order by TimeGenerated desc` |
+| TRAFFIC-DENY | Traffic Denied | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Palo Alto Networks" \| where Activity == "TRAFFIC" \| where DeviceAction == "deny" \| project TimeGenerated, SourceIP, DestinationIP, DestinationPort, Protocol, Reason \| order by TimeGenerated desc` |
+| THREAT-MALWARE | Malware Detected | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Palo Alto Networks" \| where Activity == "THREAT" \| where ThreatCategory == "malware" \| project TimeGenerated, SourceIP, DestinationIP, ThreatName, DeviceAction \| order by TimeGenerated desc` |
+| THREAT-SPYWARE | Spyware Detected | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Palo Alto Networks" \| where Activity == "THREAT" \| where ThreatCategory == "spyware" \| project TimeGenerated, SourceIP, DestinationIP, ThreatName, DeviceAction \| order by TimeGenerated desc` |
+| THREAT-VULNERABILITY | Vulnerability Exploit | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Palo Alto Networks" \| where Activity == "THREAT" \| where ThreatCategory == "vulnerability" \| project TimeGenerated, SourceIP, DestinationIP, ThreatName, DeviceAction \| order by TimeGenerated desc` |
+| URL-FILTERING | URL Filtering | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Palo Alto Networks" \| where Activity == "THREAT" \| where ThreatCategory == "url-filtering" \| project TimeGenerated, SourceIP, DestinationIP, RequestURL, DeviceAction \| order by TimeGenerated desc` |
+| WILDFIRE | WildFire Analysis | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Palo Alto Networks" \| where Activity == "THREAT" \| where ThreatCategory == "wildfire" \| project TimeGenerated, SourceIP, DestinationIP, ThreatName, DeviceAction \| order by TimeGenerated desc` |
+| SYSTEM-CONFIG | Configuration Change | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Palo Alto Networks" \| where Activity == "SYSTEM" \| where Message contains "config" \| project TimeGenerated, SourceUserName, Message \| order by TimeGenerated desc` |
+| SYSTEM-LOGIN | Admin Login | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Palo Alto Networks" \| where Activity == "SYSTEM" \| where Message contains "login" \| project TimeGenerated, SourceUserName, SourceIP, Message \| order by TimeGenerated desc` |
+| SYSTEM-LOGOUT | Admin Logout | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Palo Alto Networks" \| where Activity == "SYSTEM" \| where Message contains "logout" \| project TimeGenerated, SourceUserName, SourceIP, Message \| order by TimeGenerated desc` |
+
+## Cisco Meraki
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| FLOW-ALLOW | Traffic Flow Allowed | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Cisco" \| where DeviceProduct == "Meraki" \| where Message contains "flow" \| where DeviceAction == "allow" \| project TimeGenerated, SourceIP, DestinationIP, DestinationPort, Protocol \| order by TimeGenerated desc` |
+| FLOW-DENY | Traffic Flow Denied | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Cisco" \| where DeviceProduct == "Meraki" \| where Message contains "flow" \| where DeviceAction == "deny" \| project TimeGenerated, SourceIP, DestinationIP, DestinationPort, Protocol \| order by TimeGenerated desc` |
+| IDS-ALERT | IDS Alert | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Cisco" \| where DeviceProduct == "Meraki" \| where Message contains "ids-alert" \| project TimeGenerated, SourceIP, DestinationIP, Message \| order by TimeGenerated desc` |
+| VPN-CONNECT | VPN Connection | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Cisco" \| where DeviceProduct == "Meraki" \| where Message contains "vpn" \| where Message contains "connect" \| project TimeGenerated, SourceIP, SourceUserName, Message \| order by TimeGenerated desc` |
+| VPN-DISCONNECT | VPN Disconnection | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Cisco" \| where DeviceProduct == "Meraki" \| where Message contains "vpn" \| where Message contains "disconnect" \| project TimeGenerated, SourceIP, SourceUserName, Message \| order by TimeGenerated desc` |
+| DHCP-LEASE | DHCP Lease | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Cisco" \| where DeviceProduct == "Meraki" \| where Message contains "dhcp" \| project TimeGenerated, SourceIP, Message \| order by TimeGenerated desc` |
+| WIFI-CONNECT | WiFi Connection | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Cisco" \| where DeviceProduct == "Meraki" \| where Message contains "association" \| project TimeGenerated, SourceIP, Message \| order by TimeGenerated desc` |
+| WIFI-DISCONNECT | WiFi Disconnection | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Cisco" \| where DeviceProduct == "Meraki" \| where Message contains "disassociation" \| project TimeGenerated, SourceIP, Message \| order by TimeGenerated desc` |
+| CONFIG-CHANGE | Configuration Change | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Cisco" \| where DeviceProduct == "Meraki" \| where Message contains "configuration" \| project TimeGenerated, SourceUserName, Message \| order by TimeGenerated desc` |
+| FIRMWARE-UPDATE | Firmware Update | `CommonSecurityLog \| where TimeGenerated > ago(5d) \| where DeviceVendor == "Cisco" \| where DeviceProduct == "Meraki" \| where Message contains "firmware" \| project TimeGenerated, Message \| order by TimeGenerated desc` |
+
+## Active Directory
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 4624 | Successful Logon | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4624 \| where LogonType in (2,3,10) \| project TimeGenerated, Computer, Account, LogonType, IpAddress, WorkstationName \| order by TimeGenerated desc` |
+| 4625 | Failed Logon | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4625 \| project TimeGenerated, Computer, Account, LogonType, IpAddress, WorkstationName, FailureReason \| order by TimeGenerated desc` |
+| 4648 | Logon with Explicit Credentials | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4648 \| project TimeGenerated, Computer, Account, TargetAccount, IpAddress \| order by TimeGenerated desc` |
+| 4672 | Special Privileges Assigned | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4672 \| project TimeGenerated, Computer, Account, PrivilegeList \| order by TimeGenerated desc` |
+| 4720 | User Account Created | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4720 \| project TimeGenerated, Computer, Account, TargetAccount \| order by TimeGenerated desc` |
+| 4726 | User Account Deleted | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4726 \| project TimeGenerated, Computer, Account, TargetAccount \| order by TimeGenerated desc` |
+| 4728 | User Added to Security Group | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4728 \| project TimeGenerated, Computer, Account, TargetAccount, GroupName \| order by TimeGenerated desc` |
+| 4740 | User Account Locked | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4740 \| project TimeGenerated, Computer, Account, TargetAccount \| order by TimeGenerated desc` |
+| 4767 | User Account Unlocked | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4767 \| project TimeGenerated, Computer, Account, TargetAccount \| order by TimeGenerated desc` |
+| 4771 | Kerberos Pre-auth Failed | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4771 \| project TimeGenerated, Computer, Account, IpAddress, FailureCode \| order by TimeGenerated desc` |
+| 4776 | Domain Controller Auth | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4776 \| project TimeGenerated, Computer, Account, Workstation, ErrorCode \| order by TimeGenerated desc` |
+| 5136 | Directory Service Object Modified | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 5136 \| project TimeGenerated, Computer, Account, ObjectDN, AttributeName \| order by TimeGenerated desc` |
+
+### DNS Server Event IDs (DNS Server Log)
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 150 | DNS Zone Load | `Event \| where TimeGenerated > ago(5d) \| where EventID == 150 \| where Source == "DNS" \| project TimeGenerated, Computer, RenderedDescription, ZoneName \| order by TimeGenerated desc` |
+| 770 | DNS Query | `Event \| where TimeGenerated > ago(5d) \| where EventID == 770 \| where Source == "DNS" \| project TimeGenerated, Computer, RenderedDescription, QueryName, QueryType, ClientIP \| order by TimeGenerated desc` |
+| 6004 | DNS Service Status | `Event \| where TimeGenerated > ago(5d) \| where EventID == 6004 \| where Source == "DNS" \| project TimeGenerated, Computer, RenderedDescription, ServiceStatus \| order by TimeGenerated desc` |
+
+### Active Directory Event IDs (Directory Service Log)
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 1644 | Database Consistency Check | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1644 \| where Source == "NTDS" \| project TimeGenerated, Computer, RenderedDescription, DatabaseName \| order by TimeGenerated desc` |
+| 2887 | AD Replication Error | `Event \| where TimeGenerated > ago(5d) \| where EventID == 2887 \| where Source == "NTDS" \| project TimeGenerated, Computer, RenderedDescription, ReplicationPartner \| order by TimeGenerated desc` |
+
+### Task Scheduler Event IDs (Task Scheduler Log)
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 100 | Task Started | `Event \| where TimeGenerated > ago(5d) \| where EventID == 100 \| where Source == "Microsoft-Windows-TaskScheduler" \| project TimeGenerated, Computer, RenderedDescription, TaskName \| order by TimeGenerated desc` |
+| 101 | Task Start Failed | `Event \| where TimeGenerated > ago(5d) \| where EventID == 101 \| where Source == "Microsoft-Windows-TaskScheduler" \| project TimeGenerated, Computer, RenderedDescription, TaskName \| order by TimeGenerated desc` |
+| 102 | Task Completed | `Event \| where TimeGenerated > ago(5d) \| where EventID == 102 \| where Source == "Microsoft-Windows-TaskScheduler" \| project TimeGenerated, Computer, RenderedDescription, TaskName, ResultCode \| order by TimeGenerated desc` |
+| 103 | Task Failed | `Event \| where TimeGenerated > ago(5d) \| where EventID == 103 \| where Source == "Microsoft-Windows-TaskScheduler" \| project TimeGenerated, Computer, RenderedDescription, TaskName \| order by TimeGenerated desc` |
+| 107 | Task Triggered | `Event \| where TimeGenerated > ago(5d) \| where EventID == 107 \| where Source == "Microsoft-Windows-TaskScheduler" \| project TimeGenerated, Computer, RenderedDescription, TaskName \| order by TimeGenerated desc` |
+| 110 | Task Triggered by User | `Event \| where TimeGenerated > ago(5d) \| where EventID == 110 \| where Source == "Microsoft-Windows-TaskScheduler" \| project TimeGenerated, Computer, RenderedDescription, TaskName \| order by TimeGenerated desc` |
+| 111 | Task Terminated | `Event \| where TimeGenerated > ago(5d) \| where EventID == 111 \| where Source == "Microsoft-Windows-TaskScheduler" \| project TimeGenerated, Computer, RenderedDescription, TaskName \| order by TimeGenerated desc` |
+| 117 | Task Action Started | `Event \| where TimeGenerated > ago(5d) \| where EventID == 117 \| where Source == "Microsoft-Windows-TaskScheduler" \| project TimeGenerated, Computer, RenderedDescription, TaskName \| order by TimeGenerated desc` |
+| 118 | Task Action Completed | `Event \| where TimeGenerated > ago(5d) \| where EventID == 118 \| where Source == "Microsoft-Windows-TaskScheduler" \| project TimeGenerated, Computer, RenderedDescription, TaskName \| order by TimeGenerated desc` |
+| 119 | Task Action Failed | `Event \| where TimeGenerated > ago(5d) \| where EventID == 119 \| where Source == "Microsoft-Windows-TaskScheduler" \| project TimeGenerated, Computer, RenderedDescription, TaskName \| order by TimeGenerated desc` |
+| 200 | Task Action Launched | `Event \| where TimeGenerated > ago(5d) \| where EventID == 200 \| where Source == "Microsoft-Windows-TaskScheduler" \| project TimeGenerated, Computer, RenderedDescription, TaskName \| order by TimeGenerated desc` |
+| 201 | Task Action Success | `Event \| where TimeGenerated > ago(5d) \| where EventID == 201 \| where Source == "Microsoft-Windows-TaskScheduler" \| project TimeGenerated, Computer, RenderedDescription, TaskName, ResultCode \| order by TimeGenerated desc` |
+
+### Windows Defender Event IDs (Windows Defender Log)
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 1000 | Scan Started | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1000 \| where Source == "Microsoft-Windows-Windows Defender" \| project TimeGenerated, Computer, RenderedDescription, ProductName \| order by TimeGenerated desc` |
+| 1001 | Scan Completed | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1001 \| where Source == "Microsoft-Windows-Windows Defender" \| project TimeGenerated, Computer, RenderedDescription, ProductName \| order by TimeGenerated desc` |
+| 1002 | Scan Cancelled | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1002 \| where Source == "Microsoft-Windows-Windows Defender" \| project TimeGenerated, Computer, RenderedDescription, ProductName \| order by TimeGenerated desc` |
+| 1006 | Malware Detected | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1006 \| where Source == "Microsoft-Windows-Windows Defender" \| project TimeGenerated, Computer, RenderedDescription, ThreatName \| order by TimeGenerated desc` |
+| 1007 | Malware Action Taken | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1007 \| where Source == "Microsoft-Windows-Windows Defender" \| project TimeGenerated, Computer, RenderedDescription, ThreatName \| order by TimeGenerated desc` |
+| 1008 | Malware Action Failed | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1008 \| where Source == "Microsoft-Windows-Windows Defender" \| project TimeGenerated, Computer, RenderedDescription, ThreatName \| order by TimeGenerated desc` |
+| 1009 | Malware Restored | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1009 \| where Source == "Microsoft-Windows-Windows Defender" \| project TimeGenerated, Computer, RenderedDescription, ThreatName \| order by TimeGenerated desc` |
+| 1010 | Malware Quarantined | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1010 \| where Source == "Microsoft-Windows-Windows Defender" \| project TimeGenerated, Computer, RenderedDescription, ThreatName \| order by TimeGenerated desc` |
+| 1116 | Malware Detected | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1116 \| where Source == "Microsoft-Windows-Windows Defender" \| project TimeGenerated, Computer, RenderedDescription, ThreatName \| order by TimeGenerated desc` |
+| 1117 | Malware Action Taken | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1117 \| where Source == "Microsoft-Windows-Windows Defender" \| project TimeGenerated, Computer, RenderedDescription, ThreatName \| order by TimeGenerated desc` |
+| 1118 | Malware Action Failed | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1118 \| where Source == "Microsoft-Windows-Windows Defender" \| project TimeGenerated, Computer, RenderedDescription, ThreatName \| order by TimeGenerated desc` |
+| 1119 | Critical Error | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1119 \| where Source == "Microsoft-Windows-Windows Defender" \| project TimeGenerated, Computer, RenderedDescription, ThreatName \| order by TimeGenerated desc` |
+
+### Certificate Services Event IDs (Certificate Services Log)
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 4868 | Certificate Request Received | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4868 \| project TimeGenerated, Computer, CertificateTemplate, RequestId, Account \| order by TimeGenerated desc` |
+| 4869 | Certificate Request Approved | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4869 \| project TimeGenerated, Computer, CertificateTemplate, RequestId, Account \| order by TimeGenerated desc` |
+| 4870 | Certificate Request Denied | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4870 \| project TimeGenerated, Computer, CertificateTemplate, RequestId, Account \| order by TimeGenerated desc` |
+| 4871 | Certificate Request Pending | `SecurityEvent \| where TimeGenerated > ago(5d) \| where EventID == 4871 \| project TimeGenerated, Computer, CertificateTemplate, RequestId, Account \| order by TimeGenerated desc` |
+
+### Remote Desktop Services Event IDs (TerminalServices Log)
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 1149 | RDP Authentication Success | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1149 \| where Source == "TerminalServices" \| project TimeGenerated, Computer, RenderedDescription, UserName, SourceNetworkAddress \| order by TimeGenerated desc` |
+| 21 | RDP Logon Success | `Event \| where TimeGenerated > ago(5d) \| where EventID == 21 \| where Source == "TerminalServices" \| project TimeGenerated, Computer, RenderedDescription, UserName, SessionId \| order by TimeGenerated desc` |
+| 22 | RDP Shell Start | `Event \| where TimeGenerated > ago(5d) \| where EventID == 22 \| where Source == "TerminalServices" \| project TimeGenerated, Computer, RenderedDescription, UserName, SessionId \| order by TimeGenerated desc` |
+| 23 | RDP Logoff | `Event \| where TimeGenerated > ago(5d) \| where EventID == 23 \| where Source == "TerminalServices" \| project TimeGenerated, Computer, RenderedDescription, UserName, SessionId \| order by TimeGenerated desc` |
+| 24 | RDP Session Disconnected | `Event \| where TimeGenerated > ago(5d) \| where EventID == 24 \| where Source == "TerminalServices" \| project TimeGenerated, Computer, RenderedDescription, UserName, SessionId \| order by TimeGenerated desc` |
+| 25 | RDP Session Reconnected | `Event \| where TimeGenerated > ago(5d) \| where EventID == 25 \| where Source == "TerminalServices" \| project TimeGenerated, Computer, RenderedDescription, UserName, SessionId \| order by TimeGenerated desc` |
+
+### Windows Firewall Event IDs (Windows Firewall Log)
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 2003 | Windows Firewall Rule Added | `Event \| where TimeGenerated > ago(5d) \| where EventID == 2003 \| where Source == "Microsoft-Windows-Windows Firewall With Advanced Security" \| project TimeGenerated, Computer, RenderedDescription, RuleName \| order by TimeGenerated desc` |
+| 2004 | Windows Firewall Rule Modified | `Event \| where TimeGenerated > ago(5d) \| where EventID == 2004 \| where Source == "Microsoft-Windows-Windows Firewall With Advanced Security" \| project TimeGenerated, Computer, RenderedDescription, RuleName \| order by TimeGenerated desc` |
+| 2005 | Windows Firewall Rule Deleted | `Event \| where TimeGenerated > ago(5d) \| where EventID == 2005 \| where Source == "Microsoft-Windows-Windows Firewall With Advanced Security" \| project TimeGenerated, Computer, RenderedDescription, RuleName \| order by TimeGenerated desc` |
+| 2006 | Windows Firewall Settings Changed | `Event \| where TimeGenerated > ago(5d) \| where EventID == 2006 \| where Source == "Microsoft-Windows-Windows Firewall With Advanced Security" \| project TimeGenerated, Computer, RenderedDescription \| order by TimeGenerated desc` |
+
+### Performance Counters/WMI Event IDs
+
+| Event ID | Description | KQL Query |
+|----------|-------------|-----------|
+| 10 | WMI Error | `Event \| where TimeGenerated > ago(5d) \| where EventID == 10 \| where Source == "WMI" \| project TimeGenerated, Computer, RenderedDescription, ErrorCode \| order by TimeGenerated desc` |
+| 5858 | Performance Counter Error | `Event \| where TimeGenerated > ago(5d) \| where EventID == 5858 \| project TimeGenerated, Computer, RenderedDescription, CounterName \| order by TimeGenerated desc` |
+| 2 | Performance Library Error | `Event \| where TimeGenerated > ago(5d) \| where EventID == 2 \| where Source == "PerfLib" \| project TimeGenerated, Computer, RenderedDescription, ServiceName \| order by TimeGenerated desc` |
+| 1008 | Performance Counter Access | `Event \| where TimeGenerated > ago(5d) \| where EventID == 1008 \| where Source == "PerfLib" \| project TimeGenerated, Computer, RenderedDescription, CounterName \| order by TimeGenerated desc` |
+
+## Summary KQL Queries
+
+### Top 10 Most Common Event IDs (Last 5 Days)
+```kql
+union SecurityEvent, Event
+| where TimeGenerated > ago(5d)
+| summarize count() by EventID
+| top 10 by count_
+| project EventID, EventCount = count_
+```
+
+### Event ID Frequency by Day
+```kql
+union SecurityEvent, Event
+| where TimeGenerated > ago(5d)
+| extend Day = format_datetime(TimeGenerated, "yyyy-MM-dd")
+| summarize count() by Day, EventID
+| order by Day asc, count_ desc
+```
+
+### Critical Security Events Overview
+```kql
+SecurityEvent
+| where TimeGenerated > ago(5d)
+| where EventID in (4624, 4625, 4648, 4672, 4720, 4726)
+| summarize count() by EventID, Computer
+| order by count_ desc
+```
+
+### Failed Logon Analysis
+```kql
+SecurityEvent
+| where TimeGenerated > ago(5d)
+| where EventID == 4625
+| summarize count() by Account, IpAddress, FailureReason
+| order by count_ desc
+```
+
+### Service Start/Stop Events
+```kql
+Event
+| where TimeGenerated > ago(5d)
+| where EventID in (7035, 7036)
+| extend ServiceName = extract(@"Service Name:\s*([^,]+)", 1, RenderedDescription)
+| summarize count() by EventID, ServiceName
+| order by ServiceName asc, count_ desc
+```
+
+## Usage Notes
+
+1. **Table Names**: Adjust the table names (`SecurityEvent`, `Event`, `Syslog`, `CommonSecurityLog`) based on your specific Log Analytics workspace configuration.
+
+2. **Time Range**: All queries use `ago(5d)` for the past 5 days. Modify as needed for different time ranges (e.g., `ago(14d)` for 14 days to match your Splunk queries).
+
+3. **Filtering**: Add additional filters to reduce noise and focus on specific scenarios relevant to your environment.
+
+4. **Performance**: For large environments, consider adding more specific filters or using `take` or `top` operators to limit result sets.
+
+5. **Custom Fields**: Some queries may need adjustment based on your specific log parsing and field mapping configurations. Field names like `Account`, `IpAddress`, `ServiceName` may vary.
+
+6. **Source Filtering**: Some queries include Source filters to distinguish between logs from different services that might share event IDs.
+
+7. **Field Extraction**: Use `extract()` function for complex field parsing from RenderedDescription or EventData fields.
+
+8. **Union Operations**: Use `union` when querying across multiple tables (SecurityEvent, Event, Syslog).
+
+9. **Correlation**: These queries can be combined with `join` operations for advanced threat hunting and correlation analysis.
+
+10. **Data Availability**: Ensure that the appropriate data connectors are configured in your Log Analytics workspace to receive these event types.
